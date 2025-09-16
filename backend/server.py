@@ -127,7 +127,7 @@ class Risk(BaseModel):
     p: int  # Probability (1-5)
     a: int  # Impact (1-5)
     score: int = Field(default=0)
-    probability: str = "wahrscheinlich"  # "unwahrscheinlich", "wahrscheinlich", "sehr wahrscheinlich"
+    probability: str = "unwahrscheinlich"  # "unwahrscheinlich", "sehr wahrscheinlich"
     trigger: str
     resp: str  # Response
     owner: str
