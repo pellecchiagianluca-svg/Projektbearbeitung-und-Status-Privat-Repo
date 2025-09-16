@@ -268,6 +268,63 @@ function App() {
     }
   };
 
+  const createBudget = async () => {
+    if (!validateProjectSelection()) return;
+    
+    if (!budgetForm.item || budgetForm.plan <= 0) {
+      toast.error("Bitte füllen Sie alle Pflichtfelder aus");
+      return;
+    }
+
+    try {
+      const budgetData = {
+        ...budgetForm,
+        project_id: selectedProject,
+        plan: parseFloat(budgetForm.plan),
+        actual: parseFloat(budgetForm.actual),
+        fc: parseFloat(budgetForm.fc)
+      };
+      
+      await axios.post(`${API}/budget`, budgetData);
+      toast.success("Budgetposten erfolgreich erstellt");
+      setBudgetForm({
+        project_id: "",
+        item: "",
+        plan: 0,
+        actual: 0,
+        fc: 0,
+        comment: ""
+      });
+      loadProjectData();
+    } catch (error) {
+      console.error("Fehler beim Erstellen des Budgetpostens:", error);
+      toast.error("Fehler beim Erstellen des Budgetpostens");
+    }
+  };
+
+  const calculateBudgetTotals = () => {
+    const totalPlan = budgetItems.reduce((sum, item) => sum + (item.plan || 0), 0);
+    const totalActual = budgetItems.reduce((sum, item) => sum + (item.actual || 0), 0);
+    const totalFc = budgetItems.reduce((sum, item) => sum + (item.fc || 0), 0);
+    const totalDelta = totalFc - totalPlan;
+    
+    return { totalPlan, totalActual, totalFc, totalDelta };
+  };
+
+  const calculateBudgetTrend = () => {
+    if (budgetItems.length === 0) return { burnRate: 0, projectedEnd: 0, riskLevel: 'low' };
+    
+    const { totalPlan, totalActual, totalFc } = calculateBudgetTotals();
+    const burnRate = totalActual / totalPlan * 100;
+    const projectedOverrun = ((totalFc - totalPlan) / totalPlan) * 100;
+    
+    let riskLevel = 'low';
+    if (projectedOverrun > 20) riskLevel = 'high';
+    else if (projectedOverrun > 10) riskLevel = 'mid';
+    
+    return { burnRate, projectedOverrun, riskLevel };
+  };
+
   const getStatusIcon = (status) => {
     switch(status) {
       case 'up': return <span className="text-green-600 font-bold">↑</span>;
