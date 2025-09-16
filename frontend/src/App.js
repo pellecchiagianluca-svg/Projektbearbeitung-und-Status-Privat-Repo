@@ -770,11 +770,11 @@ function App() {
                     </div>
                   ) : (
                     <div className="space-y-4">
-                      {tasks.length === 0 ? (
+                      {tasks.filter(task => task.project_id === selectedProject).length === 0 ? (
                         <p className="text-slate-500 text-center py-4">Noch keine Aufgaben definiert</p>
                       ) : (
                         <div className="space-y-3">
-                          {tasks.map((task) => (
+                          {tasks.filter(task => task.project_id === selectedProject).map((task) => (
                             <div key={task.id} className="p-4 border rounded-lg bg-slate-50 hover:bg-slate-100 transition-colors">
                               <div className="flex items-start justify-between">
                                 <div className="flex-1">
