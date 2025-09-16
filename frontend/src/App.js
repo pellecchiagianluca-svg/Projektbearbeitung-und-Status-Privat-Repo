@@ -252,6 +252,7 @@ function App() {
         status: "planned"
       });
       loadProjectData();
+      loadAllMilestones();
     } catch (error) {
       console.error("Fehler beim Erstellen des Meilensteins:", error);
       toast.error("Fehler beim Erstellen des Meilensteins");
