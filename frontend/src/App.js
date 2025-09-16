@@ -316,6 +316,42 @@ function App() {
     }
   };
 
+  const createRisk = async () => {
+    if (!validateProjectSelection()) return;
+    
+    if (!riskForm.title || !riskForm.cea || !riskForm.trigger || !riskForm.resp || !riskForm.owner) {
+      toast.error("Bitte füllen Sie alle Pflichtfelder aus");
+      return;
+    }
+
+    try {
+      const riskData = {
+        ...riskForm,
+        project_id: selectedProject
+      };
+      
+      await axios.post(`${API}/risks`, riskData);
+      toast.success(`${riskForm.category === 'chance' ? 'Chance' : 'Risiko'} erfolgreich erstellt`);
+      setRiskForm({
+        project_id: "",
+        title: "",
+        category: "risk",
+        cea: "",
+        p: 3,
+        a: 3,
+        probability: "wahrscheinlich",
+        trigger: "",
+        resp: "",
+        owner: "",
+        status: "open"
+      });
+      loadProjectData();
+    } catch (error) {
+      console.error("Fehler beim Erstellen des Risikos/Chance:", error);
+      toast.error("Fehler beim Erstellen des Risikos/Chance");
+    }
+  };
+
   const calculateBudgetTotals = () => {
     const totalPlan = budgetItems.reduce((sum, item) => sum + (item.plan || 0), 0);
     const totalActual = budgetItems.reduce((sum, item) => sum + (item.actual || 0), 0);
