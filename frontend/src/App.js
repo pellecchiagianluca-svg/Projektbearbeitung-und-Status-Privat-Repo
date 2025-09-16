@@ -47,6 +47,15 @@ function App() {
     note: ""
   });
 
+  const [milestoneForm, setMilestoneForm] = useState({
+    project_id: "",
+    gate: "",
+    plan: "",
+    fc: "",
+    owner: "",
+    status: "planned"
+  });
+
   const [milestones, setMilestones] = useState([]);
   const [budgetItems, setBudgetItems] = useState([]);
   const [risks, setRisks] = useState([]);
