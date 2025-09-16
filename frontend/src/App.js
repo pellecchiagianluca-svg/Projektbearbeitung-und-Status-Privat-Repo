@@ -371,6 +371,49 @@ function App() {
     }
   };
 
+  const createChange = async () => {
+    if (!validateProjectSelection()) return;
+    
+    if (!changeForm.index || !changeForm.title || !changeForm.description || !changeForm.requester || !changeForm.decision_maker) {
+      toast.error("Bitte füllen Sie alle Pflichtfelder aus");
+      return;
+    }
+
+    try {
+      const changeData = {
+        ...changeForm,
+        project_id: selectedProject
+      };
+      
+      await axios.post(`${API}/changes`, changeData);
+      toast.success("Change Request erfolgreich erstellt");
+      setChangeForm({
+        project_id: "",
+        index: "",
+        type: "change_request",
+        title: "",
+        description: "",
+        impact: {
+          time_days: 0,
+          cost_eur: 0.0,
+          scope: ""
+        },
+        priority: "mittel",
+        cost_coverage: "nein",
+        approved: "nein",
+        requester: "",
+        decision_maker: "",
+        planned_implementation: "",
+        notes: "",
+        status: "open"
+      });
+      loadProjectData();
+    } catch (error) {
+      console.error("Fehler beim Erstellen des Change Requests:", error);
+      toast.error("Fehler beim Erstellen des Change Requests");
+    }
+  };
+
   const calculateBudgetTotals = () => {
     const totalPlan = budgetItems.reduce((sum, item) => sum + (item.plan || 0), 0);
     const totalActual = budgetItems.reduce((sum, item) => sum + (item.actual || 0), 0);
