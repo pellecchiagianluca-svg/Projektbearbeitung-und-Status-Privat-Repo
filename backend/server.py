@@ -178,24 +178,42 @@ class TaskCreate(BaseModel):
 class ChangeRequest(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     project_id: str
-    subject: str
+    index: str  # CR-001, CR-002, etc.
+    type: str = "change_request"  # "change_request", "kundenwunsch", "reklamation", "optimierung", "zusatzleistung"
+    title: str
+    description: str
     impact: dict = Field(default_factory=lambda: {
         "time_days": 0,
         "cost_eur": 0.0,
         "scope": ""
     })
+    priority: str = "mittel"  # "niedrig", "mittel", "hoch", "kritisch"
     status: ChangeStatus = ChangeStatus.OPEN
+    cost_coverage: str = "nein"  # "ja", "nein", "teilweise"
+    approved: str = "nein"  # "ja", "nein", "in_pruefung"
+    requester: str  # Antragsteller
     decision_maker: str
+    planned_implementation: Optional[str] = None
+    notes: Optional[str] = None
 
 class ChangeRequestCreate(BaseModel):
     project_id: str
-    subject: str
+    index: str
+    type: str = "change_request"
+    title: str
+    description: str
     impact: dict = Field(default_factory=lambda: {
         "time_days": 0,
         "cost_eur": 0.0,
         "scope": ""
     })
+    priority: str = "mittel"
+    cost_coverage: str = "nein"
+    approved: str = "nein"
+    requester: str
     decision_maker: str
+    planned_implementation: Optional[str] = None
+    notes: Optional[str] = None
     status: ChangeStatus = ChangeStatus.OPEN
 
 # Helper functions
