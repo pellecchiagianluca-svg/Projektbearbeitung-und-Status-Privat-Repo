@@ -122,10 +122,12 @@ class Risk(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     project_id: str
     title: str
+    category: str = "risk"  # "risk" or "chance"
     cea: str  # Cause Effect Action
     p: int  # Probability (1-5)
     a: int  # Impact (1-5)
     score: int = Field(default=0)
+    probability: str = "wahrscheinlich"  # "unwahrscheinlich", "wahrscheinlich", "sehr wahrscheinlich"
     trigger: str
     resp: str  # Response
     owner: str
@@ -134,9 +136,11 @@ class Risk(BaseModel):
 class RiskCreate(BaseModel):
     project_id: str
     title: str
+    category: str = "risk"
     cea: str
     p: int = Field(ge=1, le=5)
     a: int = Field(ge=1, le=5)
+    probability: str = "wahrscheinlich"
     trigger: str
     resp: str
     owner: str
