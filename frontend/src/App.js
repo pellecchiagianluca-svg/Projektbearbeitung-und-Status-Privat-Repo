@@ -1093,10 +1093,39 @@ function App() {
                           <CardDescription>{projectData.customer}</CardDescription>
                         </CardHeader>
                         <CardContent>
-                          {projectData.tasks.length === 0 ? (
-                            <p className="text-slate-500 text-sm">Keine Aufgaben definiert</p>
+                          {projectData.tasks.length === 0 && projectData.milestones.length === 0 ? (
+                            <p className="text-slate-500 text-sm">Keine Aufgaben oder Meilensteine definiert</p>
                           ) : (
                             <div className="space-y-2">
+                              {/* Milestones */}
+                              {projectData.milestones.map((milestone) => (
+                                <div key={milestone.id} className="flex items-center justify-between p-2 bg-blue-50 rounded border-l-4 border-blue-500">
+                                  <div className="flex items-center gap-2">
+                                    <span className="text-xs bg-blue-200 px-2 py-1 rounded font-bold">MS</span>
+                                    <span className="text-sm font-semibold text-blue-800">{milestone.gate}</span>
+                                    <span className={`text-xs px-2 py-1 rounded ${
+                                      milestone.status === 'planned' ? 'bg-blue-100 text-blue-800' :
+                                      milestone.status === 'in_progress' ? 'bg-yellow-100 text-yellow-800' :
+                                      milestone.status === 'completed' ? 'bg-green-100 text-green-800' :
+                                      milestone.status === 'delayed' ? 'bg-red-100 text-red-800' : 'bg-gray-100 text-gray-800'
+                                    }`}>
+                                      {milestone.status === 'planned' ? 'Geplant' :
+                                       milestone.status === 'in_progress' ? 'In Arbeit' :
+                                       milestone.status === 'completed' ? 'Fertig' :
+                                       milestone.status === 'delayed' ? 'Verzögert' : milestone.status}
+                                    </span>
+                                  </div>
+                                  <div className="flex items-center gap-2 text-sm text-slate-600">
+                                    <span>{milestone.owner}</span>
+                                    <span className="font-medium">{new Date(milestone.plan).toLocaleDateString('de-DE')}</span>
+                                    {milestone.fc && (
+                                      <span className="text-orange-600">FC: {new Date(milestone.fc).toLocaleDateString('de-DE')}</span>
+                                    )}
+                                  </div>
+                                </div>
+                              ))}
+                              
+                              {/* Tasks */}
                               {projectData.tasks.map((task) => (
                                 <div key={task.id} className="flex items-center justify-between p-2 bg-slate-50 rounded">
                                   <div className="flex items-center gap-2">
