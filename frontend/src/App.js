@@ -19,7 +19,7 @@ const API = `${BACKEND_URL}/api`;
 function App() {
   const [selectedProject, setSelectedProject] = useState("");
   const [projects, setProjects] = useState([]);
-  const [activeTab, setActiveTab] = useState("overview");
+  const [activeTab, setActiveTab] = useState("projects");
   const [loading, setLoading] = useState(false);
 
   // Form states
