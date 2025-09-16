@@ -262,6 +262,166 @@ class ProjectReportingAPITester:
             data=risk_data
         )[0]
 
+    def test_create_task(self):
+        """Test creating a task with all fields"""
+        if not self.created_project_id:
+            print("❌ No project ID available for task creation test")
+            return False
+
+        # Create task as specified in the test scenario
+        task_data = {
+            "project_id": self.created_project_id,
+            "pos": 1,
+            "index": "A.1",
+            "date": datetime.now(timezone.utc).isoformat(),
+            "task": "Frontend Entwicklung",
+            "owner": "Max Mustermann",
+            "due": (datetime.now(timezone.utc).replace(hour=0, minute=0, second=0, microsecond=0)).isoformat(),
+            "status": "right",
+            "prog": 25,
+            "risk_level": "low",
+            "risk_desc": "Minimal risk expected",
+            "note": "Initial frontend development task"
+        }
+        
+        success, response = self.run_test(
+            "Create Task (A.1 Frontend Entwicklung)",
+            "POST",
+            "tasks",
+            200,
+            data=task_data
+        )
+        
+        if success and 'id' in response:
+            self.created_task_id = response['id']
+            print(f"   Created task ID: {self.created_task_id}")
+            
+            # Verify all fields are present in response
+            expected_fields = ['id', 'project_id', 'pos', 'index', 'date', 'task', 'owner', 'due', 'status', 'prog', 'risk_level', 'note']
+            missing_fields = [field for field in expected_fields if field not in response]
+            if missing_fields:
+                print(f"   ⚠️  Missing fields in task response: {missing_fields}")
+            else:
+                print(f"   ✅ Task has all required fields")
+                
+            # Verify specific values
+            if response.get('prog') == 25:
+                print(f"   ✅ Progress correctly set to 25%")
+            if response.get('status') == 'right':
+                print(f"   ✅ Status correctly set to 'right' (Orange/OK)")
+            if response.get('risk_level') == 'low':
+                print(f"   ✅ Risk level correctly set to 'low'")
+                
+            return True
+        return False
+
+    def test_create_multiple_tasks(self):
+        """Test creating multiple tasks for timeline testing"""
+        if not self.created_project_id:
+            print("❌ No project ID available for multiple task creation test")
+            return False
+
+        tasks_data = [
+            {
+                "project_id": self.created_project_id,
+                "pos": 2,
+                "index": "A.2",
+                "date": datetime.now(timezone.utc).isoformat(),
+                "task": "Backend API Entwicklung",
+                "owner": "Anna Schmidt",
+                "due": (datetime.now(timezone.utc).replace(hour=0, minute=0, second=0, microsecond=0)).isoformat(),
+                "status": "up",
+                "prog": 75,
+                "risk_level": "mid",
+                "note": "Backend development in progress"
+            },
+            {
+                "project_id": self.created_project_id,
+                "pos": 3,
+                "index": "B.1",
+                "date": datetime.now(timezone.utc).isoformat(),
+                "task": "Database Setup",
+                "owner": "Tom Mueller",
+                "due": (datetime.now(timezone.utc).replace(hour=0, minute=0, second=0, microsecond=0)).isoformat(),
+                "status": "down",
+                "prog": 10,
+                "risk_level": "high",
+                "note": "Database configuration issues"
+            }
+        ]
+        
+        success_count = 0
+        for i, task_data in enumerate(tasks_data, 1):
+            success, response = self.run_test(
+                f"Create Task {i+1} ({task_data['index']} {task_data['task']})",
+                "POST",
+                "tasks",
+                200,
+                data=task_data
+            )
+            if success:
+                success_count += 1
+                
+        return success_count == len(tasks_data)
+
+    def test_get_tasks_for_project(self):
+        """Test getting tasks filtered by project_id"""
+        if not self.created_project_id:
+            print("❌ No project ID available for task retrieval test")
+            return False
+            
+        success, response = self.run_test(
+            "Get Tasks for Project",
+            "GET",
+            "tasks",
+            200,
+            params={"project_id": self.created_project_id}
+        )
+        
+        if success and isinstance(response, list):
+            print(f"   ✅ Retrieved {len(response)} tasks for project")
+            
+            # Verify task structure
+            if len(response) > 0:
+                task = response[0]
+                expected_fields = ['id', 'project_id', 'pos', 'index', 'task', 'owner', 'due', 'status', 'prog', 'risk_level']
+                missing_fields = [field for field in expected_fields if field not in task]
+                if missing_fields:
+                    print(f"   ⚠️  Missing fields in task: {missing_fields}")
+                else:
+                    print(f"   ✅ Task structure is correct")
+                    
+                # Check for different status values
+                statuses = [task.get('status') for task in response]
+                unique_statuses = set(statuses)
+                print(f"   📊 Task statuses found: {list(unique_statuses)}")
+                
+                # Check for different risk levels
+                risk_levels = [task.get('risk_level') for task in response]
+                unique_risks = set(risk_levels)
+                print(f"   📊 Risk levels found: {list(unique_risks)}")
+                
+                # Check progress values
+                progress_values = [task.get('prog') for task in response]
+                print(f"   📊 Progress values: {progress_values}")
+                
+            return True
+        return False
+
+    def test_get_all_tasks(self):
+        """Test getting all tasks without project filter"""
+        success, response = self.run_test(
+            "Get All Tasks",
+            "GET",
+            "tasks",
+            200
+        )
+        
+        if success and isinstance(response, list):
+            print(f"   ✅ Retrieved {len(response)} total tasks")
+            return True
+        return False
+
     def test_delete_project(self):
         """Test deleting a project"""
         if not self.created_project_id:
