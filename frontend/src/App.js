@@ -413,8 +413,8 @@ function App() {
           <TabsContent value="overview" className="space-y-6">
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {projects.map((project) => (
-                <Card key={project.id} className={`project-card ${
-                  selectedProject === project.id ? 'selected' : ''
+                <Card key={project.id} className={`project-card transition-all duration-300 transform hover:scale-105 ${
+                  selectedProject === project.id ? 'selected ring-2 ring-green-500 bg-green-50' : 'hover:shadow-xl'
                 }`}>
                   <CardHeader className="pb-4">
                     <div className="flex items-start justify-between mb-2">
