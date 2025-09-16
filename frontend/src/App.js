@@ -140,12 +140,126 @@ function App() {
     return <Badge className={statusInfo.color}>{statusInfo.label}</Badge>;
   };
 
-  const validateProjectSelection = () => {
-    if (!selectedProject) {
-      toast.error("Bitte wählen Sie zuerst ein Projekt aus");
-      return false;
+  const createTask = async () => {
+    if (!validateProjectSelection()) return;
+    
+    if (!taskForm.task || !taskForm.owner || !taskForm.due) {
+      toast.error("Bitte füllen Sie alle Pflichtfelder aus");
+      return;
     }
-    return true;
+
+    try {
+      const taskData = {
+        ...taskForm,
+        project_id: selectedProject,
+        date: new Date().toISOString(),
+        due: new Date(taskForm.due).toISOString()
+      };
+      
+      await axios.post(`${API}/tasks`, taskData);
+      toast.success("Aufgabe erfolgreich erstellt");
+      setTaskForm({
+        project_id: "",
+        pos: 1,
+        index: "",
+        date: new Date().toISOString().split('T')[0],
+        task: "",
+        owner: "",
+        due: "",
+        status: "right",
+        prog: 0,
+        risk_level: "low",
+        risk_desc: "",
+        note: ""
+      });
+      loadProjectData();
+    } catch (error) {
+      console.error("Fehler beim Erstellen der Aufgabe:", error);
+      toast.error("Fehler beim Erstellen der Aufgabe");
+    }
+  };
+
+  const getStatusIcon = (status) => {
+    switch(status) {
+      case 'up': return <span className="text-green-600 font-bold">↑</span>;
+      case 'right': return <span className="text-orange-600 font-bold">→</span>;
+      case 'down': return <span className="text-red-600 font-bold">↓</span>;
+      default: return <span className="text-gray-600">—</span>;
+    }
+  };
+
+  const getRiskLevelColor = (level) => {
+    switch(level) {
+      case 'low': return 'bg-green-100 text-green-800';
+      case 'mid': return 'bg-yellow-100 text-yellow-800';
+      case 'high': return 'bg-red-100 text-red-800';
+      default: return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const generateTimelineData = () => {
+    const timelineData = [];
+    
+    if (timelineView === "all") {
+      // Show all projects with their tasks
+      projects.forEach(project => {
+        const projectTasks = tasks.filter(task => task.project_id === project.id);
+        timelineData.push({
+          type: 'project',
+          id: project.id,
+          title: project.title,
+          customer: project.customer,
+          status: project.status,
+          tasks: projectTasks
+        });
+      });
+    } else if (selectedProject) {
+      // Show only selected project
+      const project = projects.find(p => p.id === selectedProject);
+      if (project) {
+        const projectTasks = tasks.filter(task => task.project_id === selectedProject);
+        timelineData.push({
+          type: 'project',
+          id: project.id,
+          title: project.title,
+          customer: project.customer,
+          status: project.status,
+          tasks: projectTasks
+        });
+      }
+    }
+    
+    return timelineData;
+  };
+
+  const getDateRange = () => {
+    const today = new Date();
+    const threeMonthsAgo = new Date(today.getFullYear(), today.getMonth() - 3, 1);
+    const threeMonthsFromNow = new Date(today.getFullYear(), today.getMonth() + 3, 31);
+    return { start: threeMonthsAgo, end: threeMonthsFromNow };
+  };
+
+  const generateDateColumns = () => {
+    const { start, end } = getDateRange();
+    const dates = [];
+    const current = new Date(start);
+    
+    while (current <= end) {
+      dates.push(new Date(current));
+      current.setDate(current.getDate() + 7); // Weekly columns
+    }
+    
+    return dates;
+  };
+
+  const getTaskPosition = (taskDate, startDate, endDate) => {
+    const taskTime = new Date(taskDate).getTime();
+    const startTime = startDate.getTime();
+    const endTime = endDate.getTime();
+    const totalTime = endTime - startTime;
+    const taskOffset = taskTime - startTime;
+    
+    return Math.max(0, Math.min(100, (taskOffset / totalTime) * 100));
   };
 
   return (
