@@ -379,10 +379,17 @@ function App() {
           <TabsContent value="overview" className="space-y-6">
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {projects.map((project) => (
-                <Card key={project.id} className="shadow-lg border-0 bg-white/80 backdrop-blur-sm hover:shadow-xl transition-all duration-300">
+                <Card key={project.id} className={`shadow-lg border-0 bg-white/80 backdrop-blur-sm hover:shadow-xl transition-all duration-300 ${
+                  selectedProject === project.id ? 'ring-2 ring-blue-500 bg-blue-50/50' : ''
+                }`}>
                   <CardHeader className="pb-3">
                     <div className="flex items-start justify-between">
-                      <CardTitle className="text-lg text-slate-800">{project.title}</CardTitle>
+                      <CardTitle className="text-lg text-slate-800 flex items-center gap-2">
+                        {project.title}
+                        {selectedProject === project.id && (
+                          <span className="text-sm bg-blue-600 text-white px-2 py-1 rounded">✓ Ausgewählt</span>
+                        )}
+                      </CardTitle>
                       {getStatusBadge(project.status)}
                     </div>
                     <CardDescription>{project.customer}</CardDescription>
