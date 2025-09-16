@@ -798,19 +798,7 @@ function App() {
                   </div>
                 ) : (
                   <div className="space-y-4">
-                    {changes.length === 0 ? (
-                      <p className="text-slate-500 text-center py-4">Noch keine Change Requests definiert</p>
-                    ) : (
-                      <div className="space-y-2">
-                        {changes.map((change) => (
-                          <div key={change.id} className="p-3 border rounded-lg bg-slate-50">
-                            <div className="font-medium">{change.subject}</div>
-                            <div className="text-sm text-slate-600">Status: {change.status}</div>
-                            <div className="text-sm text-slate-600">Entscheider: {change.decision_maker}</div>
-                          </div>
-                        ))}
-                      </div>
-                    )}
+                    <p className="text-slate-500 text-center py-4">Change-Request-Funktionalität wird implementiert</p>
                   </div>
                 )}
               </CardContent>
