@@ -908,153 +908,49 @@ function App() {
                   )}
                 </div>
 
-                {/* Timeline Header */}
-                <div className="mb-4">
-                  <div className="grid grid-cols-12 gap-2 bg-slate-100 p-3 rounded-lg text-sm font-medium text-slate-700">
-                    <div className="col-span-3">Projekt / Aufgabe</div>
-                    <div className="col-span-2">Verantwortlich</div>
-                    <div className="col-span-2">Status</div>
-                    <div className="col-span-2">Fälligkeitsdatum</div>
-                    <div className="col-span-1">Fortschritt</div>
-                    <div className="col-span-2">Timeline</div>
-                  </div>
-                </div>
-
-                {/* Timeline Content */}
-                <div className="space-y-4 max-h-96 overflow-y-auto">
+                
+                {/* Simple Timeline Display */}
+                <div className="space-y-4">
                   {generateTimelineData().length === 0 ? (
                     <div className="text-center py-8 text-slate-500">
                       <Clock className="h-12 w-12 mx-auto mb-3 opacity-50" />
                       <p>Keine Projekte oder Aufgaben für Timeline-Ansicht verfügbar</p>
-                      <p className="text-sm">Erstellen Sie zuerst Projekte und Aufgaben</p>
                     </div>
                   ) : (
                     generateTimelineData().map((projectData) => (
-                      <div key={projectData.id} className="border rounded-lg bg-white shadow-sm">
-                        {/* Project Header */}
-                        <div className="grid grid-cols-12 gap-2 p-3 bg-blue-50 border-b">
-                          <div className="col-span-3">
-                            <div className="font-semibold text-slate-800">{projectData.title}</div>
-                            <div className="text-sm text-slate-600">{projectData.customer}</div>
-                          </div>
-                          <div className="col-span-2 text-sm text-slate-600">—</div>
-                          <div className="col-span-2">
+                      <Card key={projectData.id} className="border rounded-lg bg-white shadow-sm">
+                        <CardHeader className="pb-2">
+                          <div className="flex items-center justify-between">
+                            <CardTitle className="text-lg">{projectData.title}</CardTitle>
                             {getStatusBadge(projectData.status)}
                           </div>
-                          <div className="col-span-2 text-sm text-slate-600">—</div>
-                          <div className="col-span-1 text-sm text-slate-600">—</div>
-                          <div className="col-span-2">
-                            <div className="h-6 bg-blue-200 rounded flex items-center justify-center text-xs font-medium text-blue-800">
-                              PROJEKT
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Project Tasks */}
-                        {projectData.tasks.length === 0 ? (
-                          <div className="p-4 text-center text-slate-500 text-sm">
-                            Keine Aufgaben für dieses Projekt
-                          </div>
-                        ) : (
-                          <div className="divide-y">
-                            {projectData.tasks.map((task) => (
-                              <div key={task.id} className="grid grid-cols-12 gap-2 p-3 hover:bg-slate-50">
-                                <div className="col-span-3">
+                          <CardDescription>{projectData.customer}</CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                          {projectData.tasks.length === 0 ? (
+                            <p className="text-slate-500 text-sm">Keine Aufgaben definiert</p>
+                          ) : (
+                            <div className="space-y-2">
+                              {projectData.tasks.map((task) => (
+                                <div key={task.id} className="flex items-center justify-between p-2 bg-slate-50 rounded">
                                   <div className="flex items-center gap-2">
                                     <span className="text-xs bg-slate-200 px-2 py-1 rounded">{task.index}</span>
-                                    <span className="text-sm font-medium truncate">{task.task}</span>
+                                    <span className="text-sm font-medium">{task.task}</span>
+                                    {getStatusIcon(task.status)}
+                                  </div>
+                                  <div className="flex items-center gap-2 text-sm text-slate-600">
+                                    <span>{task.owner}</span>
+                                    <span>{new Date(task.due).toLocaleDateString('de-DE')}</span>
+                                    <span>{task.prog}%</span>
                                   </div>
                                 </div>
-                                <div className="col-span-2 text-sm text-slate-600">{task.owner}</div>
-                                <div className="col-span-2 flex items-center gap-1">
-                                  {getStatusIcon(task.status)}
-                                  <Badge className={getRiskLevelColor(task.risk_level)} size="sm">
-                                    {task.risk_level}
-                                  </Badge>
-                                </div>
-                                <div className="col-span-2 text-sm text-slate-600">
-                                  {new Date(task.due).toLocaleDateString('de-DE')}
-                                </div>
-                                <div className="col-span-1">
-                                  <div className="flex items-center gap-1">
-                                    <div className="w-8 h-8 relative">
-                                      <svg className="w-8 h-8 transform -rotate-90" viewBox="0 0 36 36">
-                                        <path
-                                          d="m18,2.0845 a 15.9155,15.9155 0 0,1 0,31.831 a 15.9155,15.9155 0 0,1 0,-31.831"
-                                          fill="none"
-                                          stroke="#e5e7eb"
-                                          strokeWidth="3"
-                                        />
-                                        <path
-                                          d="m18,2.0845 a 15.9155,15.9155 0 0,1 0,31.831 a 15.9155,15.9155 0 0,1 0,-31.831"
-                                          fill="none"
-                                          stroke="#3b82f6"
-                                          strokeWidth="3"
-                                          strokeDasharray={`${task.prog}, 100`}
-                                        />
-                                      </svg>
-                                      <div className="absolute inset-0 flex items-center justify-center text-xs font-medium text-slate-700">
-                                        {task.prog}%
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div className="col-span-2">
-                                  <div className="relative h-6 bg-slate-100 rounded">
-                                    {/* Timeline bar representing task duration */}
-                                    <div 
-                                      className={`absolute top-0 h-full rounded ${
-                                        task.status === 'up' ? 'bg-green-500' : 
-                                        task.status === 'right' ? 'bg-orange-500' : 'bg-red-500'
-                                      }`}
-                                      style={{
-                                        left: `${getTaskPosition(task.date, getDateRange().start, getDateRange().end)}%`,
-                                        width: '8px'
-                                      }}
-                                    />
-                                    {/* Due date marker */}
-                                    <div 
-                                      className="absolute top-0 h-full w-1 bg-slate-800 rounded"
-                                      style={{
-                                        left: `${getTaskPosition(task.due, getDateRange().start, getDateRange().end)}%`
-                                      }}
-                                    />
-                                  </div>
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                      </div>
+                              ))}
+                            </div>
+                          )}
+                        </CardContent>
+                      </Card>
                     ))
                   )}
-                </div>
-
-                {/* Timeline Legend */}
-                <div className="mt-6 p-4 bg-slate-50 rounded-lg">
-                  <h4 className="font-medium text-slate-800 mb-3">Legende:</h4>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                    <div className="flex items-center gap-2">
-                      <span className="text-green-600 font-bold">↑</span>
-                      <span>Grün (Gut)</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-orange-600 font-bold">→</span>
-                      <span>Orange (OK)</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-red-600 font-bold">↓</span>
-                      <span>Rot (Probleme)</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-4 h-2 bg-slate-800 rounded"></div>
-                      <span>Fälligkeitsdatum</span>
-                    </div>
-                  </div>
-                  <div className="mt-3 text-xs text-slate-600">
-                    Timeline zeigt die nächsten 6 Monate (3 Monate vor und nach heute). 
-                    Aufgaben werden als farbige Punkte dargestellt, Fälligkeitsdaten als schwarze Striche.
-                  </div>
                 </div>
               </CardContent>
             </Card>
