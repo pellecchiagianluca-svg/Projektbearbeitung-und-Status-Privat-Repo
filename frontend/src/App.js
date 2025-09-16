@@ -79,6 +79,7 @@ function App() {
   useEffect(() => {
     if (projects.length > 0) {
       loadAllTasks();
+      loadAllMilestones();
     }
   }, [projects]);
 
