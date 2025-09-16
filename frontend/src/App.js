@@ -339,7 +339,7 @@ function App() {
         cea: "",
         p: 3,
         a: 3,
-        probability: "wahrscheinlich",
+        probability: "unwahrscheinlich",
         trigger: "",
         resp: "",
         owner: "",
