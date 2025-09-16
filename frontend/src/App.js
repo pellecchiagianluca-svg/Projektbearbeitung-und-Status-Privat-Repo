@@ -472,7 +472,7 @@ function App() {
             </TabsTrigger>
             <TabsTrigger value="risks" className="flex items-center gap-1 data-[state=active]:bg-blue-600 data-[state=active]:text-white">
               <AlertTriangle className="h-4 w-4" />
-              <span className="hidden sm:inline">Risiken</span>
+              <span className="hidden sm:inline">Chancen & Risiken</span>
             </TabsTrigger>
             <TabsTrigger value="tasks" className="flex items-center gap-1 data-[state=active]:bg-blue-600 data-[state=active]:text-white">
               <CheckSquare className="h-4 w-4" />
