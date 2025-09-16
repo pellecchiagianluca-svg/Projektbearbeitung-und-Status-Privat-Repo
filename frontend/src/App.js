@@ -342,7 +342,10 @@ function App() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Select value={selectedProject} onValueChange={handleProjectSelection}>
+            <Select value={selectedProject} onValueChange={(value) => {
+              const project = projects.find(p => p.id === value);
+              handleProjectSelection(value, project?.title || "Unbekannt");
+            }}>
               <SelectTrigger className="w-full border-slate-200 focus:border-blue-500">
                 <SelectValue placeholder="Projekt auswählen..." />
               </SelectTrigger>
