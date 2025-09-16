@@ -32,6 +32,21 @@ function App() {
     status: "planning"
   });
 
+  const [taskForm, setTaskForm] = useState({
+    project_id: "",
+    pos: 1,
+    index: "",
+    date: new Date().toISOString().split('T')[0],
+    task: "",
+    owner: "",
+    due: "",
+    status: "right",
+    prog: 0,
+    risk_level: "low",
+    risk_desc: "",
+    note: ""
+  });
+
   const [milestones, setMilestones] = useState([]);
   const [budgetItems, setBudgetItems] = useState([]);
   const [risks, setRisks] = useState([]);
