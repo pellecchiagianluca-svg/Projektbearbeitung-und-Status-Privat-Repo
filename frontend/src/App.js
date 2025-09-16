@@ -268,16 +268,18 @@ function App() {
     const timelineData = [];
     
     if (timelineView === "all") {
-      // Show all projects with their tasks
+      // Show all projects with their tasks and milestones
       projects.forEach(project => {
         const projectTasks = tasks.filter(task => task.project_id === project.id);
+        const projectMilestones = milestones.filter(milestone => milestone.project_id === project.id);
         timelineData.push({
           type: 'project',
           id: project.id,
           title: project.title,
           customer: project.customer,
           status: project.status,
-          tasks: projectTasks
+          tasks: projectTasks,
+          milestones: projectMilestones
         });
       });
     } else if (selectedProject) {
@@ -285,13 +287,15 @@ function App() {
       const project = projects.find(p => p.id === selectedProject);
       if (project) {
         const projectTasks = tasks.filter(task => task.project_id === selectedProject);
+        const projectMilestones = milestones.filter(milestone => milestone.project_id === selectedProject);
         timelineData.push({
           type: 'project',
           id: project.id,
           title: project.title,
           customer: project.customer,
           status: project.status,
-          tasks: projectTasks
+          tasks: projectTasks,
+          milestones: projectMilestones
         });
       }
     }
