@@ -218,6 +218,7 @@ function App() {
       });
       loadProjectData();
       loadAllTasks();
+      loadAllMilestones();
     } catch (error) {
       console.error("Fehler beim Erstellen der Aufgabe:", error);
       toast.error("Fehler beim Erstellen der Aufgabe");
