@@ -37,6 +37,8 @@ function App() {
   const [risks, setRisks] = useState([]);
   const [tasks, setTasks] = useState([]);
   const [changes, setChanges] = useState([]);
+  const [scheduleItems, setScheduleItems] = useState([]);
+  const [timelineView, setTimelineView] = useState("all"); // "all" or "single"
 
   // Load projects on component mount
   useEffect(() => {
