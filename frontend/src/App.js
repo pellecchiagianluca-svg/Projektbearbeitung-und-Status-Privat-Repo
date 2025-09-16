@@ -325,13 +325,13 @@ function App() {
         {/* Main Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
           <TabsList className="grid grid-cols-4 lg:grid-cols-9 gap-1 bg-white/80 backdrop-blur-sm p-1 rounded-xl shadow-sm">
-            <TabsTrigger value="overview" className="flex items-center gap-1 data-[state=active]:bg-blue-600 data-[state=active]:text-white">
-              <FileText className="h-4 w-4" />
-              <span className="hidden sm:inline">Übersicht</span>
-            </TabsTrigger>
             <TabsTrigger value="projects" className="flex items-center gap-1 data-[state=active]:bg-blue-600 data-[state=active]:text-white">
               <Users className="h-4 w-4" />
               <span className="hidden sm:inline">Projekte</span>
+            </TabsTrigger>
+            <TabsTrigger value="overview" className="flex items-center gap-1 data-[state=active]:bg-blue-600 data-[state=active]:text-white">
+              <FileText className="h-4 w-4" />
+              <span className="hidden sm:inline">Übersicht</span>
             </TabsTrigger>
             <TabsTrigger value="milestones" className="flex items-center gap-1 data-[state=active]:bg-blue-600 data-[state=active]:text-white">
               <Target className="h-4 w-4" />
