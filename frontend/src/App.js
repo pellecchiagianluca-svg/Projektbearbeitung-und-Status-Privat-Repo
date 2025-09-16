@@ -464,10 +464,15 @@ function App() {
                       </div>
                     </div>
                     <Button 
-                      onClick={() => handleProjectSelection(project.id)}
-                      className={`w-full mt-4 font-medium ${
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        console.log("Button clicked for project:", project.id, project.title);
+                        handleProjectSelection(project.id, project.title);
+                      }}
+                      className={`w-full mt-4 font-medium transition-all duration-300 transform hover:scale-105 ${
                         selectedProject === project.id 
-                          ? 'bg-green-600 hover:bg-green-700 text-white' 
+                          ? 'bg-green-600 hover:bg-green-700 text-white shadow-lg' 
                           : 'bg-blue-600 hover:bg-blue-700 text-white'
                       }`}
                     >
