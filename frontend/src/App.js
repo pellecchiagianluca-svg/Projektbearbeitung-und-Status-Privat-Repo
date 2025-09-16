@@ -805,6 +805,7 @@ function App() {
             </Card>
           </TabsContent>
 
+          {/* Timeline Tab */}
           <TabsContent value="schedule" className="space-y-6">
             <Card className="shadow-lg border-0 bg-white/80 backdrop-blur-sm">
               <CardHeader>
