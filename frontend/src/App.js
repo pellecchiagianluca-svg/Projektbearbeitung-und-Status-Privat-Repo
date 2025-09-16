@@ -506,7 +506,7 @@ function App() {
               <CardContent>
                 {!selectedProject ? (
                   <div className="text-center py-8 text-slate-500">
-                    <ChangeCircle className="h-12 w-12 mx-auto mb-3 opacity-50" />
+                    <RefreshCw className="h-12 w-12 mx-auto mb-3 opacity-50" />
                     <p>Bitte wählen Sie ein Projekt aus, um Changes zu verwalten</p>
                   </div>
                 ) : (
