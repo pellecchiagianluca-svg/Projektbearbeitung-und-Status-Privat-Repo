@@ -1173,18 +1173,18 @@ function App() {
                             </SelectContent>
                           </Select>
                         </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="risk_probability">Eintrittswahrscheinlichkeit *</Label>
-                          <Select value={riskForm.probability} onValueChange={(value) => setRiskForm({...riskForm, probability: value})}>
-                            <SelectTrigger className="border-slate-200 focus:border-blue-500">
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="unwahrscheinlich">Unwahrscheinlich</SelectItem>
-                              <SelectItem value="sehr wahrscheinlich">Sehr wahrscheinlich</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="risk_probability">Eintrittswahrscheinlichkeit *</Label>
+                        <Select value={riskForm.probability} onValueChange={(value) => setRiskForm({...riskForm, probability: value})}>
+                          <SelectTrigger className="border-slate-200 focus:border-blue-500">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="unwahrscheinlich">Unwahrscheinlich</SelectItem>
+                            <SelectItem value="sehr wahrscheinlich">Sehr wahrscheinlich</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
                       </div>
 
                       <div className="space-y-2">
