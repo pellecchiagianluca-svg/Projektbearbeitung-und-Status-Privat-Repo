@@ -1334,12 +1334,6 @@ function App() {
                                         <span className="text-xs bg-green-600 text-white px-2 py-1 rounded font-bold">
                                           Score: {risk.score || (risk.p * risk.a)}
                                         </span>
-                                        <span className={`text-xs px-2 py-1 rounded ${
-                                          risk.probability === 'sehr wahrscheinlich' ? 'bg-green-200 text-green-800' :
-                                          'bg-gray-200 text-gray-800'
-                                        }`}>
-                                          {risk.probability}
-                                        </span>
                                       </div>
                                     </div>
                                     <div className="text-sm text-green-700 space-y-2">
