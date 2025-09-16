@@ -817,30 +817,275 @@ function App() {
             </div>
           </TabsContent>
 
+          {/* Budget Tab */}
           <TabsContent value="budget" className="space-y-6">
-            <Card className="shadow-lg border-0 bg-white/80 backdrop-blur-sm">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-slate-800">
-                  <Euro className="h-5 w-5 text-blue-600" />
-                  Budget
-                </CardTitle>
-                <CardDescription>
-                  {selectedProject ? "Verwalten Sie das Budget für das ausgewählte Projekt" : "Bitte wählen Sie zuerst ein Projekt aus"}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                {!selectedProject ? (
-                  <div className="text-center py-8 text-slate-500">
-                    <Euro className="h-12 w-12 mx-auto mb-3 opacity-50" />
-                    <p>Bitte wählen Sie ein Projekt aus, um das Budget zu verwalten</p>
-                  </div>
-                ) : (
-                  <div className="space-y-4">
-                    <p className="text-slate-500 text-center py-4">Budget-Funktionalität wird implementiert</p>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
+            <div className="grid gap-6 lg:grid-cols-3">
+              {/* Budget Creation Form */}
+              <Card className="shadow-lg border-0 bg-white/80 backdrop-blur-sm">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-slate-800">
+                    <Euro className="h-5 w-5 text-blue-600" />
+                    Budgetposten hinzufügen
+                  </CardTitle>
+                  <CardDescription>
+                    {selectedProject ? "Erstellen Sie einen neuen Budgetposten für das ausgewählte Projekt" : "Bitte wählen Sie zuerst ein Projekt aus"}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {!selectedProject ? (
+                    <div className="text-center py-8 text-slate-500">
+                      <Euro className="h-12 w-12 mx-auto mb-3 opacity-50" />
+                      <p>Bitte wählen Sie ein Projekt aus, um das Budget zu verwalten</p>
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="budget_item">Budgetposten *</Label>
+                        <Input
+                          id="budget_item"
+                          value={budgetForm.item}
+                          onChange={(e) => setBudgetForm({...budgetForm, item: e.target.value})}
+                          placeholder="z.B. Personal, Material, Externe Dienstleister..."
+                          className="border-slate-200 focus:border-blue-500"
+                        />
+                      </div>
+                      
+                      <div className="grid gap-4 md:grid-cols-3">
+                        <div className="space-y-2">
+                          <Label htmlFor="budget_plan">Geplant (€) *</Label>
+                          <Input
+                            id="budget_plan"
+                            type="number"
+                            min="0"
+                            step="0.01"
+                            value={budgetForm.plan}
+                            onChange={(e) => setBudgetForm({...budgetForm, plan: parseFloat(e.target.value) || 0})}
+                            className="border-slate-200 focus:border-blue-500"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="budget_actual">Ist-Ausgaben (€)</Label>
+                          <Input
+                            id="budget_actual"
+                            type="number"
+                            min="0"
+                            step="0.01"
+                            value={budgetForm.actual}
+                            onChange={(e) => setBudgetForm({...budgetForm, actual: parseFloat(e.target.value) || 0})}
+                            className="border-slate-200 focus:border-blue-500"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="budget_fc">Forecast (€)</Label>
+                          <Input
+                            id="budget_fc"
+                            type="number"
+                            min="0"
+                            step="0.01"
+                            value={budgetForm.fc}
+                            onChange={(e) => setBudgetForm({...budgetForm, fc: parseFloat(e.target.value) || 0})}
+                            className="border-slate-200 focus:border-blue-500"
+                          />
+                        </div>
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <Label htmlFor="budget_comment">Kommentar</Label>
+                        <Textarea
+                          id="budget_comment"
+                          value={budgetForm.comment}
+                          onChange={(e) => setBudgetForm({...budgetForm, comment: e.target.value})}
+                          placeholder="Zusätzliche Informationen zum Budgetposten..."
+                          className="border-slate-200 focus:border-blue-500"
+                          rows={3}
+                        />
+                      </div>
+                      
+                      <Button 
+                        onClick={createBudget}
+                        className="w-full bg-blue-600 hover:bg-blue-700"
+                      >
+                        Budgetposten erstellen
+                      </Button>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+
+              {/* Budget Overview */}
+              <Card className="shadow-lg border-0 bg-white/80 backdrop-blur-sm">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-slate-800">
+                    <Euro className="h-5 w-5 text-blue-600" />
+                    Budget Übersicht
+                  </CardTitle>
+                  <CardDescription>
+                    {selectedProject ? "Budgetposten für das ausgewählte Projekt" : "Bitte wählen Sie zuerst ein Projekt aus"}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {!selectedProject ? (
+                    <div className="text-center py-8 text-slate-500">
+                      <Euro className="h-12 w-12 mx-auto mb-3 opacity-50" />
+                      <p>Bitte wählen Sie ein Projekt aus, um das Budget anzuzeigen</p>
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      {budgetItems.length === 0 ? (
+                        <p className="text-slate-500 text-center py-4">Noch keine Budgetposten definiert</p>
+                      ) : (
+                        <div className="space-y-3">
+                          {budgetItems.map((item) => (
+                            <div key={item.id} className="p-3 border rounded-lg bg-slate-50 hover:bg-slate-100 transition-colors">
+                              <div className="flex items-start justify-between mb-2">
+                                <h4 className="font-medium text-slate-800">{item.item}</h4>
+                                <span className={`text-sm px-2 py-1 rounded ${
+                                  item.delta > 0 ? 'bg-red-100 text-red-800' : 
+                                  item.delta < 0 ? 'bg-green-100 text-green-800' : 
+                                  'bg-gray-100 text-gray-800'
+                                }`}>
+                                  {item.delta > 0 ? '+' : ''}{item.delta?.toFixed(0)}€
+                                </span>
+                              </div>
+                              <div className="text-sm text-slate-600 space-y-1">
+                                <div className="flex justify-between">
+                                  <span>Geplant:</span>
+                                  <span className="font-medium">€{item.plan?.toLocaleString('de-DE')}</span>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span>Ist-Ausgaben:</span>
+                                  <span className="font-medium">€{item.actual?.toLocaleString('de-DE')}</span>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span>Forecast:</span>
+                                  <span className="font-medium">€{item.fc?.toLocaleString('de-DE')}</span>
+                                </div>
+                                {item.comment && (
+                                  <div className="mt-2 text-xs text-slate-500 border-t pt-2">
+                                    {item.comment}
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+
+              {/* Budget Trend Analysis */}
+              <Card className="shadow-lg border-0 bg-white/80 backdrop-blur-sm">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-slate-800">
+                    <Target className="h-5 w-5 text-blue-600" />
+                    Budget Trend & Analyse
+                  </CardTitle>
+                  <CardDescription>
+                    Budgetentwicklung und Risikoeinschätzung
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {!selectedProject ? (
+                    <div className="text-center py-8 text-slate-500">
+                      <Target className="h-12 w-12 mx-auto mb-3 opacity-50" />
+                      <p>Bitte wählen Sie ein Projekt aus, um die Trend-Analyse zu sehen</p>
+                    </div>
+                  ) : budgetItems.length === 0 ? (
+                    <div className="text-center py-8 text-slate-500">
+                      <Target className="h-12 w-12 mx-auto mb-3 opacity-50" />
+                      <p>Erstellen Sie Budgetposten, um die Trend-Analyse zu sehen</p>
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      {/* Budget Summary */}
+                      <div className="p-4 bg-blue-50 rounded-lg border">
+                        <h4 className="font-semibold text-blue-800 mb-3">Budget Zusammenfassung</h4>
+                        <div className="space-y-2 text-sm">
+                          <div className="flex justify-between">
+                            <span>Gesamtbudget (Plan):</span>
+                            <span className="font-bold text-blue-600">€{calculateBudgetTotals().totalPlan.toLocaleString('de-DE')}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>Ist-Ausgaben:</span>
+                            <span className="font-bold">€{calculateBudgetTotals().totalActual.toLocaleString('de-DE')}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>Forecast:</span>
+                            <span className="font-bold">€{calculateBudgetTotals().totalFc.toLocaleString('de-DE')}</span>
+                          </div>
+                          <div className="flex justify-between border-t pt-2">
+                            <span>Delta:</span>
+                            <span className={`font-bold ${
+                              calculateBudgetTotals().totalDelta > 0 ? 'text-red-600' : 
+                              calculateBudgetTotals().totalDelta < 0 ? 'text-green-600' : 'text-gray-600'
+                            }`}>
+                              {calculateBudgetTotals().totalDelta > 0 ? '+' : ''}€{calculateBudgetTotals().totalDelta.toLocaleString('de-DE')}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Trend Analysis */}
+                      <div className="p-4 bg-slate-50 rounded-lg border">
+                        <h4 className="font-semibold text-slate-800 mb-3">Trend-Analyse</h4>
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-between">
+                            <span className="text-sm">Ausgaben-Rate:</span>
+                            <div className="flex items-center gap-2">
+                              <div className="w-24 bg-slate-200 rounded-full h-2">
+                                <div 
+                                  className="h-full bg-blue-600 rounded-full transition-all duration-300"
+                                  style={{width: `${Math.min(100, calculateBudgetTrend().burnRate)}%`}}
+                                />
+                              </div>
+                              <span className="text-sm font-medium">{calculateBudgetTrend().burnRate.toFixed(1)}%</span>
+                            </div>
+                          </div>
+                          
+                          <div className="flex items-center justify-between">
+                            <span className="text-sm">Überziehung (Prognose):</span>
+                            <span className={`text-sm font-bold ${
+                              calculateBudgetTrend().projectedOverrun > 0 ? 'text-red-600' : 'text-green-600'
+                            }`}>
+                              {calculateBudgetTrend().projectedOverrun > 0 ? '+' : ''}{calculateBudgetTrend().projectedOverrun.toFixed(1)}%
+                            </span>
+                          </div>
+                          
+                          <div className="flex items-center justify-between">
+                            <span className="text-sm">Risiko-Level:</span>
+                            <span className={`text-xs px-2 py-1 rounded font-medium ${
+                              calculateBudgetTrend().riskLevel === 'high' ? 'bg-red-100 text-red-800' :
+                              calculateBudgetTrend().riskLevel === 'mid' ? 'bg-yellow-100 text-yellow-800' :
+                              'bg-green-100 text-green-800'
+                            }`}>
+                              {calculateBudgetTrend().riskLevel === 'high' ? 'HOCH' :
+                               calculateBudgetTrend().riskLevel === 'mid' ? 'MITTEL' :
+                               'NIEDRIG'}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Recommendations */}
+                      <div className="p-4 bg-yellow-50 rounded-lg border border-yellow-200">
+                        <h4 className="font-semibold text-yellow-800 mb-2">💡 Empfehlungen</h4>
+                        <div className="text-sm text-yellow-700">
+                          {calculateBudgetTrend().riskLevel === 'high' ? (
+                            <p>⚠️ Hohe Budgetüberschreitung prognostiziert. Sofortige Maßnahmen erforderlich!</p>
+                          ) : calculateBudgetTrend().riskLevel === 'mid' ? (
+                            <p>⚡ Budgetüberwachung verstärken. Ausgaben kritisch prüfen.</p>
+                          ) : (
+                            <p>✅ Budget im grünen Bereich. Aktueller Kurs beibehalten.</p>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
           </TabsContent>
 
           <TabsContent value="risks" className="space-y-6">
