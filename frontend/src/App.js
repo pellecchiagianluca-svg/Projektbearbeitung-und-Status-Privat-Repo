@@ -9,7 +9,7 @@ import { Input } from "./components/ui/input";
 import { Label } from "./components/ui/label";
 import { Textarea } from "./components/ui/textarea";
 import { Badge } from "./components/ui/badge";
-import { Calendar, Users, MapPin, FileText, Target, Euro, AlertTriangle, CheckSquare, ChangeCircle, Clock, MessageSquare } from "lucide-react";
+import { Calendar, Users, MapPin, FileText, Target, Euro, AlertTriangle, CheckSquare, RefreshCw, Clock, MessageSquare } from "lucide-react";
 import { Toaster } from "./components/ui/sonner";
 import { toast } from "sonner";
 
