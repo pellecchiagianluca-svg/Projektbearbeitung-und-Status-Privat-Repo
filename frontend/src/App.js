@@ -1666,30 +1666,339 @@ function App() {
             </div>
           </TabsContent>
 
+          {/* Changes Tab */}
           <TabsContent value="changes" className="space-y-6">
-            <Card className="shadow-lg border-0 bg-white/80 backdrop-blur-sm">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-slate-800">
-                  <RefreshCw className="h-5 w-5 text-blue-600" />
-                  Change Requests
-                </CardTitle>
-                <CardDescription>
-                  {selectedProject ? "Verwalten Sie Change Requests für das ausgewählte Projekt" : "Bitte wählen Sie zuerst ein Projekt aus"}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                {!selectedProject ? (
-                  <div className="text-center py-8 text-slate-500">
-                    <RefreshCw className="h-12 w-12 mx-auto mb-3 opacity-50" />
-                    <p>Bitte wählen Sie ein Projekt aus, um Changes zu verwalten</p>
-                  </div>
-                ) : (
-                  <div className="space-y-4">
-                    <p className="text-slate-500 text-center py-4">Change-Request-Funktionalität wird implementiert</p>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
+            <div className="grid gap-6 lg:grid-cols-2">
+              {/* Change Request Creation Form */}
+              <Card className="shadow-lg border-0 bg-white/80 backdrop-blur-sm">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-slate-800">
+                    <RefreshCw className="h-5 w-5 text-blue-600" />
+                    Change Request erstellen
+                  </CardTitle>
+                  <CardDescription>
+                    {selectedProject ? "Erstellen Sie einen neuen Change Request für das ausgewählte Projekt" : "Bitte wählen Sie zuerst ein Projekt aus"}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {!selectedProject ? (
+                    <div className="text-center py-8 text-slate-500">
+                      <RefreshCw className="h-12 w-12 mx-auto mb-3 opacity-50" />
+                      <p>Bitte wählen Sie ein Projekt aus, um Change Requests zu verwalten</p>
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      <div className="grid gap-4 md:grid-cols-2">
+                        <div className="space-y-2">
+                          <Label htmlFor="change_index">Index/Position *</Label>
+                          <Input
+                            id="change_index"
+                            value={changeForm.index}
+                            onChange={(e) => setChangeForm({...changeForm, index: e.target.value})}
+                            placeholder="z.B. CR-001, CR-002..."
+                            className="border-slate-200 focus:border-blue-500"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="change_type">Typ *</Label>
+                          <Select value={changeForm.type} onValueChange={(value) => setChangeForm({...changeForm, type: value})}>
+                            <SelectTrigger className="border-slate-200 focus:border-blue-500">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="change_request">Change Request</SelectItem>
+                              <SelectItem value="kundenwunsch">Aufgrund von Kundenwunsch</SelectItem>
+                              <SelectItem value="reklamation">Aufgrund von Reklamation</SelectItem>
+                              <SelectItem value="optimierung">Aufgrund von Optimierung</SelectItem>
+                              <SelectItem value="zusatzleistung">Zusatzleistungen</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="change_title">Titel *</Label>
+                        <Input
+                          id="change_title"
+                          value={changeForm.title}
+                          onChange={(e) => setChangeForm({...changeForm, title: e.target.value})}
+                          placeholder="Kurze Beschreibung des Change Requests..."
+                          className="border-slate-200 focus:border-blue-500"
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="change_description">Beschreibung *</Label>
+                        <Textarea
+                          id="change_description"
+                          value={changeForm.description}
+                          onChange={(e) => setChangeForm({...changeForm, description: e.target.value})}
+                          placeholder="Detaillierte Beschreibung des Change Requests..."
+                          className="border-slate-200 focus:border-blue-500"
+                          rows={3}
+                        />
+                      </div>
+
+                      <div className="grid gap-4 md:grid-cols-3">
+                        <div className="space-y-2">
+                          <Label htmlFor="change_time">Zeitauswirkung (Tage)</Label>
+                          <Input
+                            id="change_time"
+                            type="number"
+                            value={changeForm.impact.time_days}
+                            onChange={(e) => setChangeForm({
+                              ...changeForm, 
+                              impact: {...changeForm.impact, time_days: parseInt(e.target.value) || 0}
+                            })}
+                            className="border-slate-200 focus:border-blue-500"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="change_cost">Kostenauswirkung (€)</Label>
+                          <Input
+                            id="change_cost"
+                            type="number"
+                            step="0.01"
+                            value={changeForm.impact.cost_eur}
+                            onChange={(e) => setChangeForm({
+                              ...changeForm, 
+                              impact: {...changeForm.impact, cost_eur: parseFloat(e.target.value) || 0}
+                            })}
+                            className="border-slate-200 focus:border-blue-500"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="change_priority">Priorität</Label>
+                          <Select value={changeForm.priority} onValueChange={(value) => setChangeForm({...changeForm, priority: value})}>
+                            <SelectTrigger className="border-slate-200 focus:border-blue-500">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="niedrig">Niedrig</SelectItem>
+                              <SelectItem value="mittel">Mittel</SelectItem>
+                              <SelectItem value="hoch">Hoch</SelectItem>
+                              <SelectItem value="kritisch">Kritisch</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="change_scope">Scope-Auswirkung</Label>
+                        <Textarea
+                          id="change_scope"
+                          value={changeForm.impact.scope}
+                          onChange={(e) => setChangeForm({
+                            ...changeForm, 
+                            impact: {...changeForm.impact, scope: e.target.value}
+                          })}
+                          placeholder="Auswirkungen auf den Projektumfang..."
+                          className="border-slate-200 focus:border-blue-500"
+                          rows={2}
+                        />
+                      </div>
+
+                      <div className="grid gap-4 md:grid-cols-2">
+                        <div className="space-y-2">
+                          <Label htmlFor="change_cost_coverage">Kostenübernahme *</Label>
+                          <Select value={changeForm.cost_coverage} onValueChange={(value) => setChangeForm({...changeForm, cost_coverage: value})}>
+                            <SelectTrigger className="border-slate-200 focus:border-blue-500">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="nein">Nein</SelectItem>
+                              <SelectItem value="ja">Ja</SelectItem>
+                              <SelectItem value="teilweise">Teilweise</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="change_approved">Abgesichert/Genehmigt *</Label>
+                          <Select value={changeForm.approved} onValueChange={(value) => setChangeForm({...changeForm, approved: value})}>
+                            <SelectTrigger className="border-slate-200 focus:border-blue-500">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="nein">Nein</SelectItem>
+                              <SelectItem value="ja">Ja</SelectItem>
+                              <SelectItem value="in_pruefung">In Prüfung</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+
+                      <div className="grid gap-4 md:grid-cols-2">
+                        <div className="space-y-2">
+                          <Label htmlFor="change_requester">Antragsteller *</Label>
+                          <Input
+                            id="change_requester"
+                            value={changeForm.requester}
+                            onChange={(e) => setChangeForm({...changeForm, requester: e.target.value})}
+                            placeholder="Name des Antragstellers..."
+                            className="border-slate-200 focus:border-blue-500"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="change_decision_maker">Entscheidungsträger *</Label>
+                          <Input
+                            id="change_decision_maker"
+                            value={changeForm.decision_maker}
+                            onChange={(e) => setChangeForm({...changeForm, decision_maker: e.target.value})}
+                            placeholder="Name des Entscheidungsträgers..."
+                            className="border-slate-200 focus:border-blue-500"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="change_implementation">Geplante Umsetzung</Label>
+                        <Input
+                          id="change_implementation"
+                          type="date"
+                          value={changeForm.planned_implementation}
+                          onChange={(e) => setChangeForm({...changeForm, planned_implementation: e.target.value})}
+                          className="border-slate-200 focus:border-blue-500"
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="change_notes">Notizen</Label>
+                        <Textarea
+                          id="change_notes"
+                          value={changeForm.notes}
+                          onChange={(e) => setChangeForm({...changeForm, notes: e.target.value})}
+                          placeholder="Zusätzliche Notizen und Kommentare..."
+                          className="border-slate-200 focus:border-blue-500"
+                          rows={2}
+                        />
+                      </div>
+
+                      <Button 
+                        onClick={createChange}
+                        className="w-full bg-blue-600 hover:bg-blue-700"
+                      >
+                        Change Request erstellen
+                      </Button>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+
+              {/* Change Requests Overview */}
+              <Card className="shadow-lg border-0 bg-white/80 backdrop-blur-sm">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-slate-800">
+                    <RefreshCw className="h-5 w-5 text-blue-600" />
+                    Change Requests Übersicht
+                  </CardTitle>
+                  <CardDescription>
+                    {selectedProject ? "Change Requests für das ausgewählte Projekt" : "Bitte wählen Sie zuerst ein Projekt aus"}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {!selectedProject ? (
+                    <div className="text-center py-8 text-slate-500">
+                      <RefreshCw className="h-12 w-12 mx-auto mb-3 opacity-50" />
+                      <p>Bitte wählen Sie ein Projekt aus, um Change Requests anzuzeigen</p>
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      {changes.length === 0 ? (
+                        <p className="text-slate-500 text-center py-4">Noch keine Change Requests definiert</p>
+                      ) : (
+                        <div className="space-y-3">
+                          {changes.map((change) => (
+                            <div key={change.id} className="p-4 border rounded-lg bg-slate-50 hover:bg-slate-100 transition-colors">
+                              <div className="flex items-start justify-between mb-2">
+                                <div className="flex items-center gap-2">
+                                  <span className="text-xs bg-blue-600 text-white px-2 py-1 rounded font-bold">
+                                    {change.index}
+                                  </span>
+                                  <h5 className="font-medium text-slate-800">{change.title || change.subject}</h5>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <span className={`text-xs px-2 py-1 rounded ${
+                                    change.priority === 'kritisch' ? 'bg-red-100 text-red-800' :
+                                    change.priority === 'hoch' ? 'bg-orange-100 text-orange-800' :
+                                    change.priority === 'mittel' ? 'bg-yellow-100 text-yellow-800' :
+                                    'bg-green-100 text-green-800'
+                                  }`}>
+                                    {change.priority || 'Mittel'}
+                                  </span>
+                                  <span className={`text-xs px-2 py-1 rounded ${
+                                    change.status === 'open' ? 'bg-blue-100 text-blue-800' :
+                                    change.status === 'approved' ? 'bg-green-100 text-green-800' :
+                                    change.status === 'rejected' ? 'bg-red-100 text-red-800' :
+                                    'bg-gray-100 text-gray-800'
+                                  }`}>
+                                    {change.status === 'open' ? 'Offen' :
+                                     change.status === 'approved' ? 'Genehmigt' :
+                                     change.status === 'rejected' ? 'Abgelehnt' :
+                                     change.status === 'implemented' ? 'Implementiert' : change.status}
+                                  </span>
+                                </div>
+                              </div>
+                              
+                              <div className="text-sm text-slate-600 space-y-2">
+                                <div><strong>Typ:</strong> {
+                                  change.type === 'change_request' ? 'Change Request' :
+                                  change.type === 'kundenwunsch' ? 'Kundenwunsch' :
+                                  change.type === 'reklamation' ? 'Reklamation' :
+                                  change.type === 'optimierung' ? 'Optimierung' :
+                                  change.type === 'zusatzleistung' ? 'Zusatzleistung' :
+                                  'Change Request'
+                                }</div>
+                                {change.description && <div><strong>Beschreibung:</strong> {change.description}</div>}
+                                
+                                {(change.impact?.time_days > 0 || change.impact?.cost_eur > 0) && (
+                                  <div className="flex gap-4">
+                                    {change.impact.time_days > 0 && (
+                                      <span><strong>Zeit:</strong> +{change.impact.time_days} Tage</span>
+                                    )}
+                                    {change.impact.cost_eur > 0 && (
+                                      <span><strong>Kosten:</strong> +€{change.impact.cost_eur.toLocaleString('de-DE')}</span>
+                                    )}
+                                  </div>
+                                )}
+                                
+                                <div className="flex justify-between pt-2 border-t border-slate-200">
+                                  <div className="flex gap-4">
+                                    <span><strong>Antragsteller:</strong> {change.requester || '—'}</span>
+                                    <span><strong>Entscheider:</strong> {change.decision_maker}</span>
+                                  </div>
+                                  <div className="flex gap-2">
+                                    <span className={`text-xs px-2 py-1 rounded ${
+                                      change.cost_coverage === 'ja' ? 'bg-green-100 text-green-800' :
+                                      change.cost_coverage === 'teilweise' ? 'bg-yellow-100 text-yellow-800' :
+                                      'bg-red-100 text-red-800'
+                                    }`}>
+                                      Kostenübernahme: {change.cost_coverage === 'ja' ? 'Ja' : change.cost_coverage === 'teilweise' ? 'Teilweise' : 'Nein'}
+                                    </span>
+                                    <span className={`text-xs px-2 py-1 rounded ${
+                                      change.approved === 'ja' ? 'bg-green-100 text-green-800' :
+                                      change.approved === 'in_pruefung' ? 'bg-yellow-100 text-yellow-800' :
+                                      'bg-red-100 text-red-800'
+                                    }`}>
+                                      {change.approved === 'ja' ? 'Abgesichert' : change.approved === 'in_pruefung' ? 'In Prüfung' : 'Nicht abgesichert'}
+                                    </span>
+                                  </div>
+                                </div>
+                                
+                                {change.notes && (
+                                  <div className="mt-2 text-xs text-slate-500 border-t pt-2">
+                                    <strong>Notizen:</strong> {change.notes}
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
           </TabsContent>
 
           {/* Timeline Tab */}
