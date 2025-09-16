@@ -496,7 +496,7 @@ function App() {
             <Card className="shadow-lg border-0 bg-white/80 backdrop-blur-sm">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-slate-800">
-                  <ChangeCircle className="h-5 w-5 text-blue-600" />
+                  <RefreshCw className="h-5 w-5 text-blue-600" />
                   Change Requests
                 </CardTitle>
                 <CardDescription>
