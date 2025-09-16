@@ -56,6 +56,15 @@ function App() {
     status: "planned"
   });
 
+  const [budgetForm, setBudgetForm] = useState({
+    project_id: "",
+    item: "",
+    plan: 0,
+    actual: 0,
+    fc: 0,
+    comment: ""
+  });
+
   const [milestones, setMilestones] = useState([]);
   const [budgetItems, setBudgetItems] = useState([]);
   const [risks, setRisks] = useState([]);
