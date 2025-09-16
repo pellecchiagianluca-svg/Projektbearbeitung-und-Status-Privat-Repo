@@ -143,19 +143,6 @@ function App() {
     }
   };
 
-  const getStatusBadge = (status) => {
-    const statusMap = {
-      planning: { label: "Planung", color: "bg-blue-100 text-blue-800" },
-      active: { label: "Aktiv", color: "bg-green-100 text-green-800" },
-      on_hold: { label: "Pausiert", color: "bg-yellow-100 text-yellow-800" },
-      completed: { label: "Abgeschlossen", color: "bg-gray-100 text-gray-800" },
-      cancelled: { label: "Abgebrochen", color: "bg-red-100 text-red-800" }
-    };
-    
-    const statusInfo = statusMap[status] || { label: status, color: "bg-gray-100 text-gray-800" };
-    return <Badge className={statusInfo.color}>{statusInfo.label}</Badge>;
-  };
-
   const validateProjectSelection = () => {
     if (!selectedProject) {
       toast.error("Bitte wählen Sie zuerst ein Projekt aus");
