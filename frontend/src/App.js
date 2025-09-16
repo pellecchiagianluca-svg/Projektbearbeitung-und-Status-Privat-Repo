@@ -213,6 +213,39 @@ function App() {
     }
   };
 
+  const createMilestone = async () => {
+    if (!validateProjectSelection()) return;
+    
+    if (!milestoneForm.gate || !milestoneForm.plan || !milestoneForm.owner) {
+      toast.error("Bitte füllen Sie alle Pflichtfelder aus");
+      return;
+    }
+
+    try {
+      const milestoneData = {
+        ...milestoneForm,
+        project_id: selectedProject,
+        plan: new Date(milestoneForm.plan).toISOString(),
+        fc: milestoneForm.fc ? new Date(milestoneForm.fc).toISOString() : null
+      };
+      
+      await axios.post(`${API}/milestones`, milestoneData);
+      toast.success("Meilenstein erfolgreich erstellt");
+      setMilestoneForm({
+        project_id: "",
+        gate: "",
+        plan: "",
+        fc: "",
+        owner: "",
+        status: "planned"
+      });
+      loadProjectData();
+    } catch (error) {
+      console.error("Fehler beim Erstellen des Meilensteins:", error);
+      toast.error("Fehler beim Erstellen des Meilensteins");
+    }
+  };
+
   const getStatusIcon = (status) => {
     switch(status) {
       case 'up': return <span className="text-green-600 font-bold">↑</span>;
