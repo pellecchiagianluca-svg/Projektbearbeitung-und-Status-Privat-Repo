@@ -1348,7 +1348,6 @@ function App() {
                                         </span>
                                         <span className={`text-xs px-2 py-1 rounded ${
                                           risk.probability === 'sehr wahrscheinlich' ? 'bg-green-200 text-green-800' :
-                                          risk.probability === 'wahrscheinlich' ? 'bg-yellow-200 text-yellow-800' :
                                           'bg-gray-200 text-gray-800'
                                         }`}>
                                           {risk.probability}
