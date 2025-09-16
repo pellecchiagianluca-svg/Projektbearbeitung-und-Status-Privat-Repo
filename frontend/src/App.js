@@ -396,13 +396,7 @@ function App() {
                       {project.author}
                     </div>
                     <Button 
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        console.log('Selecting project:', project.id, project.title);
-                        setSelectedProject(project.id);
-                        toast.success(`Projekt "${project.title}" ausgewählt`);
-                      }}
+                      onClick={() => handleProjectSelection(project.id)}
                       className="w-full mt-4 bg-blue-600 hover:bg-blue-700"
                     >
                       Projekt auswählen
