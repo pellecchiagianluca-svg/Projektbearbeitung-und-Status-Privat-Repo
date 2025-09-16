@@ -128,6 +128,16 @@ function App() {
     }
   };
 
+  const loadAllMilestones = async () => {
+    try {
+      const response = await axios.get(`${API}/milestones`);
+      setMilestones(response.data);
+    } catch (error) {
+      console.error("Fehler beim Laden aller Meilensteine:", error);
+      toast.error("Fehler beim Laden aller Meilensteine");
+    }
+  };
+
   const createProject = async () => {
     if (!projectForm.title || !projectForm.customer || !projectForm.author) {
       toast.error("Bitte füllen Sie alle Pflichtfelder aus");
