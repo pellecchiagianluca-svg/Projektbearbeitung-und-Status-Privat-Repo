@@ -307,7 +307,11 @@ function App() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Select value={selectedProject} onValueChange={setSelectedProject}>
+            <Select value={selectedProject} onValueChange={(value) => {
+              console.log('Dropdown selecting project:', value);
+              setSelectedProject(value);
+              toast.success('Projekt über Dropdown ausgewählt');
+            }}>
               <SelectTrigger className="w-full border-slate-200 focus:border-blue-500">
                 <SelectValue placeholder="Projekt auswählen..." />
               </SelectTrigger>
@@ -322,6 +326,11 @@ function App() {
                 ))}
               </SelectContent>
             </Select>
+            {selectedProject && (
+              <div className="mt-3 p-2 bg-green-50 border border-green-200 rounded text-sm text-green-800">
+                ✅ Ausgewählt: {projects.find(p => p.id === selectedProject)?.title || 'Unbekanntes Projekt'}
+              </div>
+            )}
           </CardContent>
         </Card>
 
