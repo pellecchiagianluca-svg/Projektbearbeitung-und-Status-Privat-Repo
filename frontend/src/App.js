@@ -367,39 +367,53 @@ function App() {
           <TabsContent value="overview" className="space-y-6">
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {projects.map((project) => (
-                <Card key={project.id} className={`shadow-lg border-0 bg-white/80 backdrop-blur-sm hover:shadow-xl transition-all duration-300 ${
-                  selectedProject === project.id ? 'ring-2 ring-blue-500 bg-blue-50/50' : ''
+                <Card key={project.id} className={`shadow-lg border-0 bg-white hover:shadow-xl transition-all duration-300 ${
+                  selectedProject === project.id ? 'ring-2 ring-blue-500 bg-blue-50' : ''
                 }`}>
-                  <CardHeader className="pb-3">
-                    <div className="flex items-start justify-between">
-                      <CardTitle className="text-lg text-slate-800 flex items-center gap-2">
-                        {project.title}
+                  <CardHeader className="pb-4">
+                    <div className="flex items-start justify-between mb-2">
+                      <div className="flex-1 mr-3">
+                        <CardTitle className="text-base font-semibold text-slate-800 leading-tight mb-1 break-words">
+                          {project.title}
+                        </CardTitle>
                         {selectedProject === project.id && (
-                          <span className="text-sm bg-blue-600 text-white px-2 py-1 rounded">✓ Ausgewählt</span>
+                          <span className="inline-flex items-center px-2 py-1 text-xs font-medium bg-blue-600 text-white rounded-full mt-2">
+                            ✓ Ausgewählt
+                          </span>
                         )}
-                      </CardTitle>
-                      {getStatusBadge(project.status)}
+                      </div>
+                      <div className="flex-shrink-0">
+                        {getStatusBadge(project.status)}
+                      </div>
                     </div>
-                    <CardDescription>{project.customer}</CardDescription>
+                    <CardDescription className="text-sm text-slate-600 font-medium">
+                      {project.customer}
+                    </CardDescription>
                   </CardHeader>
-                  <CardContent className="space-y-3">
-                    <div className="flex items-center gap-2 text-sm text-slate-600">
-                      <MapPin className="h-4 w-4" />
-                      {project.location}
-                    </div>
-                    <div className="flex items-center gap-2 text-sm text-slate-600">
-                      <Calendar className="h-4 w-4" />
-                      {new Date(project.date).toLocaleDateString('de-DE')}
-                    </div>
-                    <div className="flex items-center gap-2 text-sm text-slate-600">
-                      <Users className="h-4 w-4" />
-                      {project.author}
+                  <CardContent className="pt-0">
+                    <div className="space-y-3">
+                      <div className="flex items-center gap-2 text-sm text-slate-600">
+                        <MapPin className="h-4 w-4 flex-shrink-0 text-slate-400" />
+                        <span className="break-words">{project.location}</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-sm text-slate-600">
+                        <Calendar className="h-4 w-4 flex-shrink-0 text-slate-400" />
+                        <span>{new Date(project.date).toLocaleDateString('de-DE')}</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-sm text-slate-600">
+                        <Users className="h-4 w-4 flex-shrink-0 text-slate-400" />
+                        <span className="break-words">{project.author}</span>
+                      </div>
                     </div>
                     <Button 
                       onClick={() => handleProjectSelection(project.id)}
-                      className="w-full mt-4 bg-blue-600 hover:bg-blue-700"
+                      className={`w-full mt-4 transition-all duration-200 ${
+                        selectedProject === project.id 
+                          ? 'bg-green-600 hover:bg-green-700 text-white' 
+                          : 'bg-blue-600 hover:bg-blue-700 text-white'
+                      }`}
                     >
-                      Projekt auswählen
+                      {selectedProject === project.id ? '✓ Ausgewählt' : 'Projekt auswählen'}
                     </Button>
                   </CardContent>
                 </Card>
