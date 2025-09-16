@@ -1138,30 +1138,294 @@ function App() {
             </div>
           </TabsContent>
 
+          {/* Risks & Chances Tab */}
           <TabsContent value="risks" className="space-y-6">
-            <Card className="shadow-lg border-0 bg-white/80 backdrop-blur-sm">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-slate-800">
-                  <AlertTriangle className="h-5 w-5 text-blue-600" />
-                  Risiken
-                </CardTitle>
-                <CardDescription>
-                  {selectedProject ? "Verwalten Sie die Risiken für das ausgewählte Projekt" : "Bitte wählen Sie zuerst ein Projekt aus"}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                {!selectedProject ? (
-                  <div className="text-center py-8 text-slate-500">
-                    <AlertTriangle className="h-12 w-12 mx-auto mb-3 opacity-50" />
-                    <p>Bitte wählen Sie ein Projekt aus, um Risiken zu verwalten</p>
-                  </div>
-                ) : (
-                  <div className="space-y-4">
-                    <p className="text-slate-500 text-center py-4">Risiko-Funktionalität wird implementiert</p>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
+            <div className="grid gap-6 lg:grid-cols-2">
+              {/* Risk/Chance Creation Form */}
+              <Card className="shadow-lg border-0 bg-white/80 backdrop-blur-sm">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-slate-800">
+                    <AlertTriangle className="h-5 w-5 text-blue-600" />
+                    Chance / Risiko hinzufügen
+                  </CardTitle>
+                  <CardDescription>
+                    {selectedProject ? "Erstellen Sie eine neue Chance oder ein neues Risiko für das ausgewählte Projekt" : "Bitte wählen Sie zuerst ein Projekt aus"}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {!selectedProject ? (
+                    <div className="text-center py-8 text-slate-500">
+                      <AlertTriangle className="h-12 w-12 mx-auto mb-3 opacity-50" />
+                      <p>Bitte wählen Sie ein Projekt aus, um Chancen & Risiken zu verwalten</p>
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      <div className="grid gap-4 md:grid-cols-2">
+                        <div className="space-y-2">
+                          <Label htmlFor="risk_category">Kategorie *</Label>
+                          <Select value={riskForm.category} onValueChange={(value) => setRiskForm({...riskForm, category: value})}>
+                            <SelectTrigger className="border-slate-200 focus:border-blue-500">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="chance">🟢 Chance</SelectItem>
+                              <SelectItem value="risk">🔴 Risiko</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="risk_probability">Eintrittswahrscheinlichkeit *</Label>
+                          <Select value={riskForm.probability} onValueChange={(value) => setRiskForm({...riskForm, probability: value})}>
+                            <SelectTrigger className="border-slate-200 focus:border-blue-500">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="unwahrscheinlich">Unwahrscheinlich</SelectItem>
+                              <SelectItem value="wahrscheinlich">Wahrscheinlich</SelectItem>
+                              <SelectItem value="sehr wahrscheinlich">Sehr wahrscheinlich</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="risk_title">Titel *</Label>
+                        <Input
+                          id="risk_title"
+                          value={riskForm.title}
+                          onChange={(e) => setRiskForm({...riskForm, title: e.target.value})}
+                          placeholder="Kurze Beschreibung der Chance/des Risikos..."
+                          className="border-slate-200 focus:border-blue-500"
+                        />
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <Label htmlFor="risk_cea">Ursache - Wirkung - Maßnahme *</Label>
+                        <Textarea
+                          id="risk_cea"
+                          value={riskForm.cea}
+                          onChange={(e) => setRiskForm({...riskForm, cea: e.target.value})}
+                          placeholder="Beschreiben Sie Ursache, Wirkung und geplante Maßnahmen..."
+                          className="border-slate-200 focus:border-blue-500"
+                          rows={3}
+                        />
+                      </div>
+
+                      <div className="grid gap-4 md:grid-cols-2">
+                        <div className="space-y-2">
+                          <Label htmlFor="risk_p">Wahrscheinlichkeit (1-5) *</Label>
+                          <Select value={riskForm.p.toString()} onValueChange={(value) => setRiskForm({...riskForm, p: parseInt(value)})}>
+                            <SelectTrigger className="border-slate-200 focus:border-blue-500">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="1">1 - Sehr gering</SelectItem>
+                              <SelectItem value="2">2 - Gering</SelectItem>
+                              <SelectItem value="3">3 - Mittel</SelectItem>
+                              <SelectItem value="4">4 - Hoch</SelectItem>
+                              <SelectItem value="5">5 - Sehr hoch</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="risk_a">Auswirkung (1-5) *</Label>
+                          <Select value={riskForm.a.toString()} onValueChange={(value) => setRiskForm({...riskForm, a: parseInt(value)})}>
+                            <SelectTrigger className="border-slate-200 focus:border-blue-500">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="1">1 - Sehr gering</SelectItem>
+                              <SelectItem value="2">2 - Gering</SelectItem>
+                              <SelectItem value="3">3 - Mittel</SelectItem>
+                              <SelectItem value="4">4 - Hoch</SelectItem>
+                              <SelectItem value="5">5 - Sehr hoch</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="risk_trigger">Auslöser / Trigger *</Label>
+                        <Input
+                          id="risk_trigger"
+                          value={riskForm.trigger}
+                          onChange={(e) => setRiskForm({...riskForm, trigger: e.target.value})}
+                          placeholder="Was löst diese Chance/dieses Risiko aus?"
+                          className="border-slate-200 focus:border-blue-500"
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="risk_resp">Reaktion / Maßnahme *</Label>
+                        <Textarea
+                          id="risk_resp"
+                          value={riskForm.resp}
+                          onChange={(e) => setRiskForm({...riskForm, resp: e.target.value})}
+                          placeholder="Wie soll auf diese Chance/dieses Risiko reagiert werden?"
+                          className="border-slate-200 focus:border-blue-500"
+                          rows={2}
+                        />
+                      </div>
+
+                      <div className="grid gap-4 md:grid-cols-2">
+                        <div className="space-y-2">
+                          <Label htmlFor="risk_owner">Verantwortlicher *</Label>
+                          <Input
+                            id="risk_owner"
+                            value={riskForm.owner}
+                            onChange={(e) => setRiskForm({...riskForm, owner: e.target.value})}
+                            placeholder="Name des Verantwortlichen..."
+                            className="border-slate-200 focus:border-blue-500"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="risk_status">Status</Label>
+                          <Select value={riskForm.status} onValueChange={(value) => setRiskForm({...riskForm, status: value})}>
+                            <SelectTrigger className="border-slate-200 focus:border-blue-500">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="open">Offen</SelectItem>
+                              <SelectItem value="monitoring">Überwachung</SelectItem>
+                              <SelectItem value="mitigated">Gemindert</SelectItem>
+                              <SelectItem value="closed">Geschlossen</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+                      
+                      <Button 
+                        onClick={createRisk}
+                        className={`w-full ${
+                          riskForm.category === 'chance' 
+                            ? 'bg-green-600 hover:bg-green-700' 
+                            : 'bg-red-600 hover:bg-red-700'
+                        }`}
+                      >
+                        {riskForm.category === 'chance' ? 'Chance erstellen' : 'Risiko erstellen'}
+                      </Button>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+
+              {/* Risks & Chances Overview */}
+              <Card className="shadow-lg border-0 bg-white/80 backdrop-blur-sm">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-slate-800">
+                    <AlertTriangle className="h-5 w-5 text-blue-600" />
+                    Chancen & Risiken Übersicht
+                  </CardTitle>
+                  <CardDescription>
+                    {selectedProject ? "Chancen und Risiken für das ausgewählte Projekt" : "Bitte wählen Sie zuerst ein Projekt aus"}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {!selectedProject ? (
+                    <div className="text-center py-8 text-slate-500">
+                      <AlertTriangle className="h-12 w-12 mx-auto mb-3 opacity-50" />
+                      <p>Bitte wählen Sie ein Projekt aus, um Chancen & Risiken anzuzeigen</p>
+                    </div>
+                  ) : (
+                    <div className="space-y-6">
+                      {risks.length === 0 ? (
+                        <p className="text-slate-500 text-center py-4">Noch keine Chancen oder Risiken definiert</p>
+                      ) : (
+                        <>
+                          {/* Chances Section */}
+                          {risks.filter(risk => risk.category === 'chance').length > 0 && (
+                            <div>
+                              <h4 className="font-semibold text-green-800 mb-3 flex items-center gap-2">
+                                🟢 Chancen ({risks.filter(risk => risk.category === 'chance').length})
+                              </h4>
+                              <div className="space-y-3">
+                                {risks.filter(risk => risk.category === 'chance').map((risk) => (
+                                  <div key={risk.id} className="p-4 border-l-4 border-green-500 bg-green-50 rounded-lg">
+                                    <div className="flex items-start justify-between mb-2">
+                                      <h5 className="font-medium text-green-800">{risk.title}</h5>
+                                      <div className="flex items-center gap-2">
+                                        <span className="text-xs bg-green-600 text-white px-2 py-1 rounded font-bold">
+                                          Score: {risk.score || (risk.p * risk.a)}
+                                        </span>
+                                        <span className={`text-xs px-2 py-1 rounded ${
+                                          risk.probability === 'sehr wahrscheinlich' ? 'bg-green-200 text-green-800' :
+                                          risk.probability === 'wahrscheinlich' ? 'bg-yellow-200 text-yellow-800' :
+                                          'bg-gray-200 text-gray-800'
+                                        }`}>
+                                          {risk.probability}
+                                        </span>
+                                      </div>
+                                    </div>
+                                    <div className="text-sm text-green-700 space-y-2">
+                                      <div><strong>Ursache-Wirkung-Maßnahme:</strong> {risk.cea}</div>
+                                      <div><strong>Trigger:</strong> {risk.trigger}</div>
+                                      <div><strong>Maßnahme:</strong> {risk.resp}</div>
+                                      <div className="flex justify-between pt-2 border-t border-green-200">
+                                        <span><strong>Verantwortlich:</strong> {risk.owner}</span>
+                                        <span><strong>Status:</strong> {
+                                          risk.status === 'open' ? 'Offen' :
+                                          risk.status === 'monitoring' ? 'Überwachung' :
+                                          risk.status === 'mitigated' ? 'Gemindert' :
+                                          risk.status === 'closed' ? 'Geschlossen' : risk.status
+                                        }</span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Risks Section */}
+                          {risks.filter(risk => risk.category === 'risk' || !risk.category).length > 0 && (
+                            <div>
+                              <h4 className="font-semibold text-red-800 mb-3 flex items-center gap-2">
+                                🔴 Risiken ({risks.filter(risk => risk.category === 'risk' || !risk.category).length})
+                              </h4>
+                              <div className="space-y-3">
+                                {risks.filter(risk => risk.category === 'risk' || !risk.category).map((risk) => (
+                                  <div key={risk.id} className="p-4 border-l-4 border-red-500 bg-red-50 rounded-lg">
+                                    <div className="flex items-start justify-between mb-2">
+                                      <h5 className="font-medium text-red-800">{risk.title}</h5>
+                                      <div className="flex items-center gap-2">
+                                        <span className="text-xs bg-red-600 text-white px-2 py-1 rounded font-bold">
+                                          Score: {risk.score || (risk.p * risk.a)}
+                                        </span>
+                                        <span className={`text-xs px-2 py-1 rounded ${
+                                          risk.probability === 'sehr wahrscheinlich' ? 'bg-red-200 text-red-800' :
+                                          risk.probability === 'wahrscheinlich' ? 'bg-yellow-200 text-yellow-800' :
+                                          'bg-gray-200 text-gray-800'
+                                        }`}>
+                                          {risk.probability || 'wahrscheinlich'}
+                                        </span>
+                                      </div>
+                                    </div>
+                                    <div className="text-sm text-red-700 space-y-2">
+                                      <div><strong>Ursache-Wirkung-Maßnahme:</strong> {risk.cea}</div>
+                                      <div><strong>Trigger:</strong> {risk.trigger}</div>
+                                      <div><strong>Maßnahme:</strong> {risk.resp}</div>
+                                      <div className="flex justify-between pt-2 border-t border-red-200">
+                                        <span><strong>Verantwortlich:</strong> {risk.owner}</span>
+                                        <span><strong>Status:</strong> {
+                                          risk.status === 'open' ? 'Offen' :
+                                          risk.status === 'monitoring' ? 'Überwachung' :
+                                          risk.status === 'mitigated' ? 'Gemindert' :
+                                          risk.status === 'closed' ? 'Geschlossen' : risk.status
+                                        }</span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                        </>
+                      )}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
           </TabsContent>
 
           <TabsContent value="tasks" className="space-y-6">
