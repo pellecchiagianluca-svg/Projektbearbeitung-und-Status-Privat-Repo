@@ -264,19 +264,6 @@ function App() {
     return { start: threeMonthsAgo, end: threeMonthsFromNow };
   };
 
-  const generateDateColumns = () => {
-    const { start, end } = getDateRange();
-    const dates = [];
-    const current = new Date(start);
-    
-    while (current <= end) {
-      dates.push(new Date(current));
-      current.setDate(current.getDate() + 7); // Weekly columns
-    }
-    
-    return dates;
-  };
-
   const getTaskPosition = (taskDate, startDate, endDate) => {
     const taskTime = new Date(taskDate).getTime();
     const startTime = startDate.getTime();
