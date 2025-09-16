@@ -593,42 +593,206 @@ function App() {
           </TabsContent>
 
           <TabsContent value="tasks" className="space-y-6">
-            <Card className="shadow-lg border-0 bg-white/80 backdrop-blur-sm">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-slate-800">
-                  <CheckSquare className="h-5 w-5 text-blue-600" />
-                  Aufgaben / OPL
-                </CardTitle>
-                <CardDescription>
-                  {selectedProject ? "Verwalten Sie die Aufgaben für das ausgewählte Projekt" : "Bitte wählen Sie zuerst ein Projekt aus"}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                {!selectedProject ? (
-                  <div className="text-center py-8 text-slate-500">
-                    <CheckSquare className="h-12 w-12 mx-auto mb-3 opacity-50" />
-                    <p>Bitte wählen Sie ein Projekt aus, um Aufgaben zu verwalten</p>
-                  </div>
-                ) : (
-                  <div className="space-y-4">
-                    {tasks.length === 0 ? (
-                      <p className="text-slate-500 text-center py-4">Noch keine Aufgaben definiert</p>
-                    ) : (
-                      <div className="space-y-2">
-                        {tasks.map((task) => (
-                          <div key={task.id} className="p-3 border rounded-lg bg-slate-50">
-                            <div className="font-medium">{task.task}</div>
-                            <div className="text-sm text-slate-600">Verantwortlich: {task.owner}</div>
-                            <div className="text-sm text-slate-600">Fortschritt: {task.prog}%</div>
-                            <div className="text-sm text-slate-600">Fällig: {new Date(task.due).toLocaleDateString('de-DE')}</div>
-                          </div>
-                        ))}
+            <div className="grid gap-6 lg:grid-cols-2">
+              {/* Task Creation Form */}
+              <Card className="shadow-lg border-0 bg-white/80 backdrop-blur-sm">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-slate-800">
+                    <CheckSquare className="h-5 w-5 text-blue-600" />
+                    Neue Aufgabe erstellen
+                  </CardTitle>
+                  <CardDescription>
+                    {selectedProject ? "Erstellen Sie eine neue Aufgabe für das ausgewählte Projekt" : "Bitte wählen Sie zuerst ein Projekt aus"}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {!selectedProject ? (
+                    <div className="text-center py-8 text-slate-500">
+                      <CheckSquare className="h-12 w-12 mx-auto mb-3 opacity-50" />
+                      <p>Bitte wählen Sie ein Projekt aus, um Aufgaben zu erstellen</p>
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      <div className="grid gap-4 md:grid-cols-2">
+                        <div className="space-y-2">
+                          <Label htmlFor="task_index">Index</Label>
+                          <Input
+                            id="task_index"
+                            value={taskForm.index}
+                            onChange={(e) => setTaskForm({...taskForm, index: e.target.value})}
+                            placeholder="A.1, B.2, etc."
+                            className="border-slate-200 focus:border-blue-500"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="task_pos">Position</Label>
+                          <Input
+                            id="task_pos"
+                            type="number"
+                            value={taskForm.pos}
+                            onChange={(e) => setTaskForm({...taskForm, pos: parseInt(e.target.value) || 1})}
+                            className="border-slate-200 focus:border-blue-500"
+                          />
+                        </div>
                       </div>
-                    )}
-                  </div>
-                )}
-              </CardContent>
-            </Card>
+                      
+                      <div className="space-y-2">
+                        <Label htmlFor="task_name">Aufgabe *</Label>
+                        <Input
+                          id="task_name"
+                          value={taskForm.task}
+                          onChange={(e) => setTaskForm({...taskForm, task: e.target.value})}
+                          placeholder="Beschreibung der Aufgabe..."
+                          className="border-slate-200 focus:border-blue-500"
+                        />
+                      </div>
+                      
+                      <div className="grid gap-4 md:grid-cols-2">
+                        <div className="space-y-2">
+                          <Label htmlFor="task_owner">Verantwortlicher *</Label>
+                          <Input
+                            id="task_owner"
+                            value={taskForm.owner}
+                            onChange={(e) => setTaskForm({...taskForm, owner: e.target.value})}
+                            placeholder="Name des Verantwortlichen..."
+                            className="border-slate-200 focus:border-blue-500"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="task_due">Fälligkeitsdatum *</Label>
+                          <Input
+                            id="task_due"
+                            type="date"
+                            value={taskForm.due}
+                            onChange={(e) => setTaskForm({...taskForm, due: e.target.value})}
+                            className="border-slate-200 focus:border-blue-500"
+                          />
+                        </div>
+                      </div>
+                      
+                      <div className="grid gap-4 md:grid-cols-3">
+                        <div className="space-y-2">
+                          <Label htmlFor="task_status">Status</Label>
+                          <Select value={taskForm.status} onValueChange={(value) => setTaskForm({...taskForm, status: value})}>
+                            <SelectTrigger className="border-slate-200 focus:border-blue-500">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="up">↑ Grün (Gut)</SelectItem>
+                              <SelectItem value="right">→ Orange (OK)</SelectItem>
+                              <SelectItem value="down">↓ Rot (Probleme)</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="task_progress">Fortschritt (%)</Label>
+                          <Input
+                            id="task_progress"
+                            type="number"
+                            min="0"
+                            max="100"
+                            value={taskForm.prog}
+                            onChange={(e) => setTaskForm({...taskForm, prog: parseInt(e.target.value) || 0})}
+                            className="border-slate-200 focus:border-blue-500"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="task_risk">Risiko Level</Label>
+                          <Select value={taskForm.risk_level} onValueChange={(value) => setTaskForm({...taskForm, risk_level: value})}>
+                            <SelectTrigger className="border-slate-200 focus:border-blue-500">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="low">Niedrig</SelectItem>
+                              <SelectItem value="mid">Mittel</SelectItem>
+                              <SelectItem value="high">Hoch</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <Label htmlFor="task_note">Notizen</Label>
+                        <Textarea
+                          id="task_note"
+                          value={taskForm.note}
+                          onChange={(e) => setTaskForm({...taskForm, note: e.target.value})}
+                          placeholder="Zusätzliche Informationen..."
+                          className="border-slate-200 focus:border-blue-500"
+                          rows={3}
+                        />
+                      </div>
+                      
+                      <Button 
+                        onClick={createTask}
+                        className="w-full bg-blue-600 hover:bg-blue-700"
+                      >
+                        Aufgabe erstellen
+                      </Button>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+
+              {/* Tasks List */}
+              <Card className="shadow-lg border-0 bg-white/80 backdrop-blur-sm">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-slate-800">
+                    <CheckSquare className="h-5 w-5 text-blue-600" />
+                    Aufgaben Übersicht
+                  </CardTitle>
+                  <CardDescription>
+                    {selectedProject ? "Aufgaben für das ausgewählte Projekt" : "Bitte wählen Sie zuerst ein Projekt aus"}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {!selectedProject ? (
+                    <div className="text-center py-8 text-slate-500">
+                      <CheckSquare className="h-12 w-12 mx-auto mb-3 opacity-50" />
+                      <p>Bitte wählen Sie ein Projekt aus, um Aufgaben anzuzeigen</p>
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      {tasks.length === 0 ? (
+                        <p className="text-slate-500 text-center py-4">Noch keine Aufgaben definiert</p>
+                      ) : (
+                        <div className="space-y-3">
+                          {tasks.map((task) => (
+                            <div key={task.id} className="p-4 border rounded-lg bg-slate-50 hover:bg-slate-100 transition-colors">
+                              <div className="flex items-start justify-between">
+                                <div className="flex-1">
+                                  <div className="flex items-center gap-2 mb-2">
+                                    <span className="text-sm font-medium text-slate-600">{task.index}</span>
+                                    {getStatusIcon(task.status)}
+                                    <Badge className={getRiskLevelColor(task.risk_level)}>{task.risk_level}</Badge>
+                                  </div>
+                                  <h4 className="font-medium text-slate-800 mb-1">{task.task}</h4>
+                                  <div className="text-sm text-slate-600 space-y-1">
+                                    <div>Verantwortlich: {task.owner}</div>
+                                    <div>Fällig: {new Date(task.due).toLocaleDateString('de-DE')}</div>
+                                    <div>Fortschritt: {task.prog}%</div>
+                                    {task.note && <div>Notiz: {task.note}</div>}
+                                  </div>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <div className="w-16 bg-slate-200 rounded-full overflow-hidden h-2">
+                                    <div 
+                                      className="h-full bg-blue-600 transition-all duration-300"
+                                      style={{width: `${task.prog}%`}}
+                                    />
+                                  </div>
+                                  <span className="text-xs text-slate-500">{task.prog}%</span>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
           </TabsContent>
 
           <TabsContent value="changes" className="space-y-6">
