@@ -65,6 +65,20 @@ function App() {
     comment: ""
   });
 
+  const [riskForm, setRiskForm] = useState({
+    project_id: "",
+    title: "",
+    category: "risk", // "risk" or "chance"
+    cea: "",
+    p: 3, // Probability (1-5)
+    a: 3, // Impact (1-5)
+    probability: "wahrscheinlich", // "unwahrscheinlich", "wahrscheinlich", "sehr wahrscheinlich"
+    trigger: "",
+    resp: "",
+    owner: "",
+    status: "open"
+  });
+
   const [milestones, setMilestones] = useState([]);
   const [budgetItems, setBudgetItems] = useState([]);
   const [risks, setRisks] = useState([]);
