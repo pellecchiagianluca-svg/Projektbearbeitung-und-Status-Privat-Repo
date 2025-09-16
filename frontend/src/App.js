@@ -78,6 +78,27 @@ function App() {
     status: "open"
   });
 
+  const [changeForm, setChangeForm] = useState({
+    project_id: "",
+    index: "",
+    type: "change_request",
+    title: "",
+    description: "",
+    impact: {
+      time_days: 0,
+      cost_eur: 0.0,
+      scope: ""
+    },
+    priority: "mittel",
+    cost_coverage: "nein",
+    approved: "nein",
+    requester: "",
+    decision_maker: "",
+    planned_implementation: "",
+    notes: "",
+    status: "open"
+  });
+
   const [milestones, setMilestones] = useState([]);
   const [budgetItems, setBudgetItems] = useState([]);
   const [risks, setRisks] = useState([]);
