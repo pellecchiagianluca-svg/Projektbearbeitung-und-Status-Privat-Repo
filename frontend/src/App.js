@@ -497,7 +497,7 @@ function App() {
             </Card>
           </TabsContent>
 
-          {/* Other tabs placeholders */}
+          {/* Other placeholder tabs */}
           <TabsContent value="milestones" className="space-y-6">
             <Card className="shadow-lg border-0 bg-white/80 backdrop-blur-sm">
               <CardHeader>
@@ -517,19 +517,7 @@ function App() {
                   </div>
                 ) : (
                   <div className="space-y-4">
-                    {milestones.length === 0 ? (
-                      <p className="text-slate-500 text-center py-4">Noch keine Meilensteine definiert</p>
-                    ) : (
-                      <div className="space-y-2">
-                        {milestones.map((milestone) => (
-                          <div key={milestone.id} className="p-3 border rounded-lg bg-slate-50">
-                            <div className="font-medium">{milestone.gate}</div>
-                            <div className="text-sm text-slate-600">Geplant: {new Date(milestone.plan).toLocaleDateString('de-DE')}</div>
-                            <div className="text-sm text-slate-600">Verantwortlich: {milestone.owner}</div>
-                          </div>
-                        ))}
-                      </div>
-                    )}
+                    <p className="text-slate-500 text-center py-4">Meilenstein-Funktionalität wird implementiert</p>
                   </div>
                 )}
               </CardContent>
@@ -555,20 +543,7 @@ function App() {
                   </div>
                 ) : (
                   <div className="space-y-4">
-                    {budgetItems.length === 0 ? (
-                      <p className="text-slate-500 text-center py-4">Noch keine Budgetposten definiert</p>
-                    ) : (
-                      <div className="space-y-2">
-                        {budgetItems.map((item) => (
-                          <div key={item.id} className="p-3 border rounded-lg bg-slate-50">
-                            <div className="font-medium">{item.item}</div>
-                            <div className="text-sm text-slate-600">Plan: €{item.plan.toLocaleString('de-DE')}</div>
-                            <div className="text-sm text-slate-600">Ist: €{item.actual.toLocaleString('de-DE')}</div>
-                            <div className="text-sm text-slate-600">Forecast: €{item.fc.toLocaleString('de-DE')}</div>
-                          </div>
-                        ))}
-                      </div>
-                    )}
+                    <p className="text-slate-500 text-center py-4">Budget-Funktionalität wird implementiert</p>
                   </div>
                 )}
               </CardContent>
@@ -594,19 +569,7 @@ function App() {
                   </div>
                 ) : (
                   <div className="space-y-4">
-                    {risks.length === 0 ? (
-                      <p className="text-slate-500 text-center py-4">Noch keine Risiken definiert</p>
-                    ) : (
-                      <div className="space-y-2">
-                        {risks.map((risk) => (
-                          <div key={risk.id} className="p-3 border rounded-lg bg-slate-50">
-                            <div className="font-medium">{risk.title}</div>
-                            <div className="text-sm text-slate-600">Score: {risk.score} (P:{risk.p} × A:{risk.a})</div>
-                            <div className="text-sm text-slate-600">Verantwortlich: {risk.owner}</div>
-                          </div>
-                        ))}
-                      </div>
-                    )}
+                    <p className="text-slate-500 text-center py-4">Risiko-Funktionalität wird implementiert</p>
                   </div>
                 )}
               </CardContent>
