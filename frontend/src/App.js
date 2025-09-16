@@ -565,31 +565,164 @@ function App() {
             </Card>
           </TabsContent>
 
-          {/* Other placeholder tabs */}
+          {/* Milestones Tab */}
           <TabsContent value="milestones" className="space-y-6">
-            <Card className="shadow-lg border-0 bg-white/80 backdrop-blur-sm">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-slate-800">
-                  <Target className="h-5 w-5 text-blue-600" />
-                  Meilensteine
-                </CardTitle>
-                <CardDescription>
-                  {selectedProject ? "Verwalten Sie die Meilensteine für das ausgewählte Projekt" : "Bitte wählen Sie zuerst ein Projekt aus"}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                {!selectedProject ? (
-                  <div className="text-center py-8 text-slate-500">
-                    <Target className="h-12 w-12 mx-auto mb-3 opacity-50" />
-                    <p>Bitte wählen Sie ein Projekt aus, um Meilensteine zu verwalten</p>
-                  </div>
-                ) : (
-                  <div className="space-y-4">
-                    <p className="text-slate-500 text-center py-4">Meilenstein-Funktionalität wird implementiert</p>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
+            <div className="grid gap-6 lg:grid-cols-2">
+              {/* Milestone Creation Form */}
+              <Card className="shadow-lg border-0 bg-white/80 backdrop-blur-sm">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-slate-800">
+                    <Target className="h-5 w-5 text-blue-600" />
+                    Neuen Meilenstein erstellen
+                  </CardTitle>
+                  <CardDescription>
+                    {selectedProject ? "Erstellen Sie einen neuen Meilenstein für das ausgewählte Projekt" : "Bitte wählen Sie zuerst ein Projekt aus"}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {!selectedProject ? (
+                    <div className="text-center py-8 text-slate-500">
+                      <Target className="h-12 w-12 mx-auto mb-3 opacity-50" />
+                      <p>Bitte wählen Sie ein Projekt aus, um Meilensteine zu erstellen</p>
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="milestone_gate">Gate/Meilenstein-Name *</Label>
+                        <Input
+                          id="milestone_gate"
+                          value={milestoneForm.gate}
+                          onChange={(e) => setMilestoneForm({...milestoneForm, gate: e.target.value})}
+                          placeholder="z.B. Projektstart, Design Review, Go-Live..."
+                          className="border-slate-200 focus:border-blue-500"
+                        />
+                      </div>
+                      
+                      <div className="grid gap-4 md:grid-cols-2">
+                        <div className="space-y-2">
+                          <Label htmlFor="milestone_plan">Geplantes Datum *</Label>
+                          <Input
+                            id="milestone_plan"
+                            type="date"
+                            value={milestoneForm.plan}
+                            onChange={(e) => setMilestoneForm({...milestoneForm, plan: e.target.value})}
+                            className="border-slate-200 focus:border-blue-500"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="milestone_fc">Forecast Datum</Label>
+                          <Input
+                            id="milestone_fc"
+                            type="date"
+                            value={milestoneForm.fc}
+                            onChange={(e) => setMilestoneForm({...milestoneForm, fc: e.target.value})}
+                            className="border-slate-200 focus:border-blue-500"
+                          />
+                        </div>
+                      </div>
+                      
+                      <div className="grid gap-4 md:grid-cols-2">
+                        <div className="space-y-2">
+                          <Label htmlFor="milestone_owner">Verantwortlicher *</Label>
+                          <Input
+                            id="milestone_owner"
+                            value={milestoneForm.owner}
+                            onChange={(e) => setMilestoneForm({...milestoneForm, owner: e.target.value})}
+                            placeholder="Name des Verantwortlichen..."
+                            className="border-slate-200 focus:border-blue-500"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="milestone_status">Status</Label>
+                          <Select value={milestoneForm.status} onValueChange={(value) => setMilestoneForm({...milestoneForm, status: value})}>
+                            <SelectTrigger className="border-slate-200 focus:border-blue-500">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="planned">Geplant</SelectItem>
+                              <SelectItem value="in_progress">In Bearbeitung</SelectItem>
+                              <SelectItem value="completed">Abgeschlossen</SelectItem>
+                              <SelectItem value="delayed">Verzögert</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+                      
+                      <Button 
+                        onClick={createMilestone}
+                        className="w-full bg-blue-600 hover:bg-blue-700"
+                      >
+                        Meilenstein erstellen
+                      </Button>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+
+              {/* Milestones List */}
+              <Card className="shadow-lg border-0 bg-white/80 backdrop-blur-sm">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-slate-800">
+                    <Target className="h-5 w-5 text-blue-600" />
+                    Meilensteine Übersicht
+                  </CardTitle>
+                  <CardDescription>
+                    {selectedProject ? "Meilensteine für das ausgewählte Projekt" : "Bitte wählen Sie zuerst ein Projekt aus"}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {!selectedProject ? (
+                    <div className="text-center py-8 text-slate-500">
+                      <Target className="h-12 w-12 mx-auto mb-3 opacity-50" />
+                      <p>Bitte wählen Sie ein Projekt aus, um Meilensteine anzuzeigen</p>
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      {milestones.length === 0 ? (
+                        <p className="text-slate-500 text-center py-4">Noch keine Meilensteine definiert</p>
+                      ) : (
+                        <div className="space-y-3">
+                          {milestones.map((milestone) => (
+                            <div key={milestone.id} className="p-4 border rounded-lg bg-slate-50 hover:bg-slate-100 transition-colors">
+                              <div className="flex items-start justify-between">
+                                <div className="flex-1">
+                                  <div className="flex items-center gap-2 mb-2">
+                                    <h4 className="font-medium text-slate-800">{milestone.gate}</h4>
+                                    <span className={`inline-block px-2 py-1 text-xs font-medium rounded-full ${
+                                      milestone.status === 'planned' ? 'bg-blue-100 text-blue-800' :
+                                      milestone.status === 'in_progress' ? 'bg-yellow-100 text-yellow-800' :
+                                      milestone.status === 'completed' ? 'bg-green-100 text-green-800' :
+                                      milestone.status === 'delayed' ? 'bg-red-100 text-red-800' : 'bg-gray-100 text-gray-800'
+                                    }`}>
+                                      {milestone.status === 'planned' ? 'Geplant' :
+                                       milestone.status === 'in_progress' ? 'In Bearbeitung' :
+                                       milestone.status === 'completed' ? 'Abgeschlossen' :
+                                       milestone.status === 'delayed' ? 'Verzögert' : milestone.status}
+                                    </span>
+                                  </div>
+                                  <div className="text-sm text-slate-600 space-y-1">
+                                    <div>Geplant: {new Date(milestone.plan).toLocaleDateString('de-DE')}</div>
+                                    {milestone.fc && (
+                                      <div>Forecast: {new Date(milestone.fc).toLocaleDateString('de-DE')}</div>
+                                    )}
+                                    <div>Verantwortlich: {milestone.owner}</div>
+                                    {milestone.delta && (
+                                      <div className={`font-medium ${milestone.delta > 0 ? 'text-red-600' : milestone.delta < 0 ? 'text-green-600' : 'text-slate-600'}`}>
+                                        Delta: {milestone.delta} Tage
+                                      </div>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
           </TabsContent>
 
           <TabsContent value="budget" className="space-y-6">
