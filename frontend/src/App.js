@@ -72,7 +72,7 @@ function App() {
     cea: "",
     p: 3, // Probability (1-5)
     a: 3, // Impact (1-5)
-    probability: "wahrscheinlich", // "unwahrscheinlich", "wahrscheinlich", "sehr wahrscheinlich"
+    probability: "unwahrscheinlich", // "unwahrscheinlich", "sehr wahrscheinlich"
     trigger: "",
     resp: "",
     owner: "",
