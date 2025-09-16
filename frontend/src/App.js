@@ -1181,7 +1181,6 @@ function App() {
                             </SelectTrigger>
                             <SelectContent>
                               <SelectItem value="unwahrscheinlich">Unwahrscheinlich</SelectItem>
-                              <SelectItem value="wahrscheinlich">Wahrscheinlich</SelectItem>
                               <SelectItem value="sehr wahrscheinlich">Sehr wahrscheinlich</SelectItem>
                             </SelectContent>
                           </Select>
