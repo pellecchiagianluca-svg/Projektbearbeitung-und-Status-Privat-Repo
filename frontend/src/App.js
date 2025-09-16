@@ -419,8 +419,10 @@ function App() {
                     </div>
                     <Button 
                       onClick={() => handleProjectSelection(project.id)}
-                      className={`project-button ${
-                        selectedProject === project.id ? 'selected' : 'unselected'
+                      className={`w-full mt-4 font-medium ${
+                        selectedProject === project.id 
+                          ? 'bg-green-600 hover:bg-green-700 text-white' 
+                          : 'bg-blue-600 hover:bg-blue-700 text-white'
                       }`}
                     >
                       {selectedProject === project.id ? '✓ Ausgewählt' : 'Projekt auswählen'}
