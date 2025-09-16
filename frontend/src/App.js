@@ -140,6 +140,14 @@ function App() {
     return <Badge className={statusInfo.color}>{statusInfo.label}</Badge>;
   };
 
+  const validateProjectSelection = () => {
+    if (!selectedProject) {
+      toast.error("Bitte wählen Sie zuerst ein Projekt aus");
+      return false;
+    }
+    return true;
+  };
+
   const createTask = async () => {
     if (!validateProjectSelection()) return;
     
