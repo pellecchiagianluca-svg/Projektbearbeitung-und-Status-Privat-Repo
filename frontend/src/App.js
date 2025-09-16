@@ -274,6 +274,11 @@ function App() {
     return Math.max(0, Math.min(100, (taskOffset / totalTime) * 100));
   };
 
+  const handleProjectSelection = (projectId) => {
+    setSelectedProject(projectId);
+    toast.success("Projekt ausgewählt");
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       <div className="container mx-auto px-4 py-8">
