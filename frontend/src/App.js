@@ -423,9 +423,9 @@ function App() {
                           {project.title}
                         </CardTitle>
                         {selectedProject === project.id && (
-                          <span className="selected-indicator">
-                            ✓ Ausgewählt
-                          </span>
+                          <div className="inline-flex items-center px-2 py-1 text-xs font-bold bg-green-600 text-white rounded-full mt-2 animate-pulse">
+                            ✓ AKTIVES PROJEKT
+                          </div>
                         )}
                       </div>
                       <div className="flex-shrink-0">
