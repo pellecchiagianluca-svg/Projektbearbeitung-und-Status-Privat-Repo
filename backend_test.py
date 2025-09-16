@@ -461,6 +461,12 @@ def main():
     test_results.append(("Create Budget Item", tester.test_create_budget_item()))
     test_results.append(("Create Risk", tester.test_create_risk()))
     
+    # Task-specific tests (focus of this review)
+    test_results.append(("Create Task (A.1)", tester.test_create_task()))
+    test_results.append(("Create Multiple Tasks", tester.test_create_multiple_tasks()))
+    test_results.append(("Get Tasks for Project", tester.test_get_tasks_for_project()))
+    test_results.append(("Get All Tasks", tester.test_get_all_tasks()))
+    
     # Cleanup
     test_results.append(("Delete Project", tester.test_delete_project()))
     
