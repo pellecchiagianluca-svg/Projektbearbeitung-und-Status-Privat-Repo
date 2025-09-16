@@ -367,50 +367,54 @@ function App() {
           <TabsContent value="overview" className="space-y-6">
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {projects.map((project) => (
-                <Card key={project.id} className={`shadow-lg border-0 bg-white hover:shadow-xl transition-all duration-300 ${
-                  selectedProject === project.id ? 'ring-2 ring-blue-500 bg-blue-50' : ''
+                <Card key={project.id} className={`project-card ${
+                  selectedProject === project.id ? 'selected' : ''
                 }`}>
                   <CardHeader className="pb-4">
                     <div className="flex items-start justify-between mb-2">
                       <div className="flex-1 mr-3">
-                        <CardTitle className="text-base font-semibold text-slate-800 leading-tight mb-1 break-words">
+                        <CardTitle className="project-title">
                           {project.title}
                         </CardTitle>
                         {selectedProject === project.id && (
-                          <span className="inline-flex items-center px-2 py-1 text-xs font-medium bg-blue-600 text-white rounded-full mt-2">
+                          <span className="selected-indicator">
                             ✓ Ausgewählt
                           </span>
                         )}
                       </div>
                       <div className="flex-shrink-0">
-                        {getStatusBadge(project.status)}
+                        <Badge className={`status-badge status-${project.status}`}>
+                          {project.status === 'planning' ? 'Planung' :
+                           project.status === 'active' ? 'Aktiv' :
+                           project.status === 'on_hold' ? 'Pausiert' :
+                           project.status === 'completed' ? 'Abgeschlossen' :
+                           project.status === 'cancelled' ? 'Abgebrochen' : project.status}
+                        </Badge>
                       </div>
                     </div>
-                    <CardDescription className="text-sm text-slate-600 font-medium">
+                    <div className="project-customer">
                       {project.customer}
-                    </CardDescription>
+                    </div>
                   </CardHeader>
                   <CardContent className="pt-0">
                     <div className="space-y-3">
-                      <div className="flex items-center gap-2 text-sm text-slate-600">
-                        <MapPin className="h-4 w-4 flex-shrink-0 text-slate-400" />
+                      <div className="project-detail">
+                        <MapPin className="h-4 w-4" />
                         <span className="break-words">{project.location}</span>
                       </div>
-                      <div className="flex items-center gap-2 text-sm text-slate-600">
-                        <Calendar className="h-4 w-4 flex-shrink-0 text-slate-400" />
+                      <div className="project-detail">
+                        <Calendar className="h-4 w-4" />
                         <span>{new Date(project.date).toLocaleDateString('de-DE')}</span>
                       </div>
-                      <div className="flex items-center gap-2 text-sm text-slate-600">
-                        <Users className="h-4 w-4 flex-shrink-0 text-slate-400" />
+                      <div className="project-detail">
+                        <Users className="h-4 w-4" />
                         <span className="break-words">{project.author}</span>
                       </div>
                     </div>
                     <Button 
                       onClick={() => handleProjectSelection(project.id)}
-                      className={`w-full mt-4 transition-all duration-200 ${
-                        selectedProject === project.id 
-                          ? 'bg-green-600 hover:bg-green-700 text-white' 
-                          : 'bg-blue-600 hover:bg-blue-700 text-white'
+                      className={`project-button ${
+                        selectedProject === project.id ? 'selected' : 'unselected'
                       }`}
                     >
                       {selectedProject === project.id ? '✓ Ausgewählt' : 'Projekt auswählen'}
