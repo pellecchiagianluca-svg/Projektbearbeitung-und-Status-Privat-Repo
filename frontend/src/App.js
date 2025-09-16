@@ -197,7 +197,7 @@ function App() {
               <span className="hidden sm:inline">Aufgaben</span>
             </TabsTrigger>
             <TabsTrigger value="changes" className="flex items-center gap-1 data-[state=active]:bg-blue-600 data-[state=active]:text-white">
-              <ChangeCircle className="h-4 w-4" />
+              <RefreshCw className="h-4 w-4" />
               <span className="hidden sm:inline">Changes</span>
             </TabsTrigger>
             <TabsTrigger value="schedule" className="flex items-center gap-1 data-[state=active]:bg-blue-600 data-[state=active]:text-white">
