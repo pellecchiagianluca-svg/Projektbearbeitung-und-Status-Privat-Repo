@@ -140,7 +140,7 @@ class RiskCreate(BaseModel):
     cea: str
     p: int = Field(ge=1, le=5)
     a: int = Field(ge=1, le=5)
-    probability: str = "wahrscheinlich"
+    probability: str = "unwahrscheinlich"
     trigger: str
     resp: str
     owner: str
