@@ -67,6 +67,13 @@ function App() {
     }
   }, [selectedProject]);
 
+  // Load all tasks for timeline when projects change
+  useEffect(() => {
+    if (projects.length > 0) {
+      loadAllTasks();
+    }
+  }, [projects]);
+
   const loadProjects = async () => {
     try {
       const response = await axios.get(`${API}/projects`);
