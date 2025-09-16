@@ -316,9 +316,10 @@ function App() {
     return Math.max(0, Math.min(100, (taskOffset / totalTime) * 100));
   };
 
-  const handleProjectSelection = (projectId) => {
+  const handleProjectSelection = (projectId, projectTitle) => {
+    console.log("Selecting project:", projectId, projectTitle);
     setSelectedProject(projectId);
-    toast.success("Projekt ausgewählt");
+    toast.success(`Projekt "${projectTitle}" ausgewählt`);
   };
 
   return (
