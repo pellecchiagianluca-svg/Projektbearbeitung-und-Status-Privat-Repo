@@ -2,7 +2,7 @@ name: Build & Deploy Frontend to GitHub Pages
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   workflow_dispatch:
 
 permissions:
@@ -28,12 +28,13 @@ jobs:
 
       - name: Install deps
         working-directory: frontend
-       run: npm install
+        run: npm install
 
       - name: Build
         working-directory: frontend
         run: npm run build
 
+      # React/SPA-Fallback: 404 -> index
       - name: Add SPA fallback
         run: cp frontend/build/index.html frontend/build/404.html
 
