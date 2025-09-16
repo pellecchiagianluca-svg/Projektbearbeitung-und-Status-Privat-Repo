@@ -383,13 +383,19 @@ function App() {
                         )}
                       </div>
                       <div className="flex-shrink-0">
-                        <Badge className={`status-badge status-${project.status}`}>
+                        <span className={`inline-block px-2 py-1 text-xs font-medium rounded-full ${
+                          project.status === 'planning' ? 'bg-blue-100 text-blue-800' :
+                          project.status === 'active' ? 'bg-green-100 text-green-800' :
+                          project.status === 'on_hold' ? 'bg-yellow-100 text-yellow-800' :
+                          project.status === 'completed' ? 'bg-gray-100 text-gray-800' :
+                          project.status === 'cancelled' ? 'bg-red-100 text-red-800' : 'bg-gray-100 text-gray-800'
+                        }`}>
                           {project.status === 'planning' ? 'Planung' :
                            project.status === 'active' ? 'Aktiv' :
                            project.status === 'on_hold' ? 'Pausiert' :
                            project.status === 'completed' ? 'Abgeschlossen' :
                            project.status === 'cancelled' ? 'Abgebrochen' : project.status}
-                        </Badge>
+                        </span>
                       </div>
                     </div>
                     <div className="project-customer">
