@@ -1097,48 +1097,74 @@ function App() {
                             <p className="text-slate-500 text-sm">Keine Aufgaben oder Meilensteine definiert</p>
                           ) : (
                             <div className="space-y-2">
-                              {/* Milestones */}
-                              {projectData.milestones.map((milestone) => (
-                                <div key={milestone.id} className="flex items-center justify-between p-2 bg-blue-50 rounded border-l-4 border-blue-500">
-                                  <div className="flex items-center gap-2">
-                                    <span className="text-xs bg-blue-200 px-2 py-1 rounded font-bold">MS</span>
-                                    <span className="text-sm font-semibold text-blue-800">{milestone.gate}</span>
-                                    <span className={`text-xs px-2 py-1 rounded ${
-                                      milestone.status === 'planned' ? 'bg-blue-100 text-blue-800' :
-                                      milestone.status === 'in_progress' ? 'bg-yellow-100 text-yellow-800' :
-                                      milestone.status === 'completed' ? 'bg-green-100 text-green-800' :
-                                      milestone.status === 'delayed' ? 'bg-red-100 text-red-800' : 'bg-gray-100 text-gray-800'
-                                    }`}>
-                                      {milestone.status === 'planned' ? 'Geplant' :
-                                       milestone.status === 'in_progress' ? 'In Arbeit' :
-                                       milestone.status === 'completed' ? 'Fertig' :
-                                       milestone.status === 'delayed' ? 'Verzögert' : milestone.status}
-                                    </span>
+                              {/* Combine and sort milestones and tasks by date */}
+                              {[
+                                ...projectData.milestones.map(milestone => ({
+                                  ...milestone,
+                                  type: 'milestone',
+                                  sortDate: new Date(milestone.plan).getTime()
+                                })),
+                                ...projectData.tasks.map(task => ({
+                                  ...task,
+                                  type: 'task',
+                                  sortDate: new Date(task.due).getTime()
+                                }))
+                              ]
+                              .sort((a, b) => a.sortDate - b.sortDate)
+                              .map((item) => (
+                                item.type === 'milestone' ? (
+                                  <div key={`milestone-${item.id}`} className="flex items-center justify-between p-3 bg-blue-50 rounded-lg border-l-4 border-blue-500">
+                                    <div className="flex items-center gap-3">
+                                      <span className="text-xs bg-blue-600 text-white px-2 py-1 rounded font-bold">MS</span>
+                                      <div>
+                                        <span className="text-sm font-semibold text-blue-800">{item.gate}</span>
+                                        <div className="flex items-center gap-2 mt-1">
+                                          <span className={`text-xs px-2 py-1 rounded ${
+                                            item.status === 'planned' ? 'bg-blue-100 text-blue-800' :
+                                            item.status === 'in_progress' ? 'bg-yellow-100 text-yellow-800' :
+                                            item.status === 'completed' ? 'bg-green-100 text-green-800' :
+                                            item.status === 'delayed' ? 'bg-red-100 text-red-800' : 'bg-gray-100 text-gray-800'
+                                          }`}>
+                                            {item.status === 'planned' ? 'Geplant' :
+                                             item.status === 'in_progress' ? 'In Arbeit' :
+                                             item.status === 'completed' ? 'Fertig' :
+                                             item.status === 'delayed' ? 'Verzögert' : item.status}
+                                          </span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div className="text-right">
+                                      <div className="text-sm font-medium text-slate-700">{item.owner}</div>
+                                      <div className="text-sm text-blue-600 font-bold">{new Date(item.plan).toLocaleDateString('de-DE')}</div>
+                                      {item.fc && (
+                                        <div className="text-xs text-orange-600">FC: {new Date(item.fc).toLocaleDateString('de-DE')}</div>
+                                      )}
+                                    </div>
                                   </div>
-                                  <div className="flex items-center gap-2 text-sm text-slate-600">
-                                    <span>{milestone.owner}</span>
-                                    <span className="font-medium">{new Date(milestone.plan).toLocaleDateString('de-DE')}</span>
-                                    {milestone.fc && (
-                                      <span className="text-orange-600">FC: {new Date(milestone.fc).toLocaleDateString('de-DE')}</span>
-                                    )}
+                                ) : (
+                                  <div key={`task-${item.id}`} className="flex items-center justify-between p-3 bg-slate-50 rounded-lg border-l-4 border-slate-300">
+                                    <div className="flex items-center gap-3">
+                                      <span className="text-xs bg-slate-500 text-white px-2 py-1 rounded">{item.index}</span>
+                                      <div>
+                                        <span className="text-sm font-medium text-slate-800">{item.task}</span>
+                                        <div className="flex items-center gap-2 mt-1">
+                                          {getStatusIcon(item.status)}
+                                          <div className="w-16 bg-slate-200 rounded-full h-2">
+                                            <div 
+                                              className="h-full bg-blue-600 rounded-full transition-all duration-300"
+                                              style={{width: `${item.prog}%`}}
+                                            />
+                                          </div>
+                                          <span className="text-xs text-slate-500">{item.prog}%</span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div className="text-right">
+                                      <div className="text-sm font-medium text-slate-700">{item.owner}</div>
+                                      <div className="text-sm text-slate-600">{new Date(item.due).toLocaleDateString('de-DE')}</div>
+                                    </div>
                                   </div>
-                                </div>
-                              ))}
-                              
-                              {/* Tasks */}
-                              {projectData.tasks.map((task) => (
-                                <div key={task.id} className="flex items-center justify-between p-2 bg-slate-50 rounded">
-                                  <div className="flex items-center gap-2">
-                                    <span className="text-xs bg-slate-200 px-2 py-1 rounded">{task.index}</span>
-                                    <span className="text-sm font-medium">{task.task}</span>
-                                    {getStatusIcon(task.status)}
-                                  </div>
-                                  <div className="flex items-center gap-2 text-sm text-slate-600">
-                                    <span>{task.owner}</span>
-                                    <span>{new Date(task.due).toLocaleDateString('de-DE')}</span>
-                                    <span>{task.prog}%</span>
-                                  </div>
-                                </div>
+                                )
                               ))}
                             </div>
                           )}
