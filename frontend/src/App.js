@@ -110,6 +110,16 @@ function App() {
     }
   };
 
+  const loadAllTasks = async () => {
+    try {
+      const response = await axios.get(`${API}/tasks`);
+      setTasks(response.data);
+    } catch (error) {
+      console.error("Fehler beim Laden aller Aufgaben:", error);
+      toast.error("Fehler beim Laden aller Aufgaben");
+    }
+  };
+
   const createProject = async () => {
     if (!projectForm.title || !projectForm.customer || !projectForm.author) {
       toast.error("Bitte füllen Sie alle Pflichtfelder aus");
