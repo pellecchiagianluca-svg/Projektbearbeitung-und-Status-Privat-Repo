@@ -64,17 +64,18 @@ body {
 
 /* Typography improvements */
 .project-title {
-  font-size: 1rem;
-  font-weight: 600;
-  line-height: 1.4;
-  color: #1e293b;
-  word-break: break-word;
-  hyphens: auto;
-  max-height: 3.2em;
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+  font-size: 0.9rem !important;
+  font-weight: 600 !important;
+  line-height: 1.3 !important;
+  color: #1e293b !important;
+  word-break: break-word !important;
+  hyphens: auto !important;
+  max-height: 2.6em !important;
+  overflow: hidden !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+  margin-bottom: 0.5rem !important;
 }
 
 .project-customer {
