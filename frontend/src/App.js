@@ -1,11 +1,14 @@
 // frontend/src/App.js
 import { useEffect, useState } from "react";
 import "./App.css";
-
+const PROJECTS_URL = `${process.env.PUBLIC_URL}/api/projects/index.json`;
 // <<< HIER NUR DIESE EINE ZEILE ANPASSEN, WENN SICH DER REPO-NAME ÄNDERT >>>
-const PROJECTS_URL =
-  "https://pellecchiagianluca-svg.github.io/Projektbearbeitung-und-Status-Privat-Repo/api/projects/index.json";
-
+seEffect(() => {
+  fetch(PROJECTS_URL)
+    .then((res) => res.json())
+    .then((data) => setProjects(data))
+    .catch((err) => console.error("Fehler beim Laden der Projekte:", err));
+}, []);
 export default function App() {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
