@@ -1,18 +1,9 @@
 [
   {
-    "id": "proj-001",
-    "name": "Pilotprojekt",
-    "title": "Pilotprojekt",
-    "customer": "Kunde A",
-    "owner": "Team Alpha",
+    "id": 1,
+    "title": "Testprojekt",
+    "kunde": "Demo-Kunde",
+    "autor": "Gianluca",
     "status": "aktiv"
-  },
-  {
-    "id": "proj-002",
-    "name": "Migration",
-    "title": "Migration",
-    "customer": "Kunde B",
-    "owner": "Team Beta",
-    "status": "geplant"
   }
 ]
