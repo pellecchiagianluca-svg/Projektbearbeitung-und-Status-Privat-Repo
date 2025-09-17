@@ -1,7 +1,8 @@
 // frontend/src/App.js
 import { useEffect, useState } from "react";
 import "./App.css";
-const PROJECTS_URL = `${process.env.PUBLIC_URL}/api/projects/index.json`;
+const PROJECTS_URL =
+  "https://pellecchiagianluca-svg.github.io/Projektbearbeitung-und-Status-Privat-Repo/api/projects/index.json";
 // <<< HIER NUR DIESE EINE ZEILE ANPASSEN, WENN SICH DER REPO-NAME ÄNDERT >>>
 seEffect(() => {
   fetch(PROJECTS_URL)
