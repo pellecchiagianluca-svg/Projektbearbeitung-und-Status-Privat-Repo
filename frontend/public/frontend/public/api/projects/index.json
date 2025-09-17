@@ -1,0 +1,4 @@
+[
+  { "id": 1, "title": "Pilotprojekt", "customer": "Kunde A", "owner": "Team Alpha", "status": "aktiv" },
+  { "id": 2, "title": "Migration", "customer": "Kunde B", "owner": "Team Beta", "status": "geplant" }
+]
