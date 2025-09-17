@@ -1,16 +1,9 @@
 [
   {
     "id": 1,
-    "title": "Projekt 204709_ABB_TURGI_ANSALDO",
-    "kunde": "ABB / Ansaldo",
-    "autor": "Gianluca Pellecchia",
+    "title": "Testprojekt",
+    "kunde": "Demo-Kunde",
+    "autor": "Gianluca",
     "status": "aktiv"
-  },
-  {
-    "id": 2,
-    "title": "Projekt 205226_Lutz Oberstufe",
-    "kunde": "Illwerke / Lutz",
-    "autor": "Gianluca Pellecchia",
-    "status": "in Planung"
   }
 ]
